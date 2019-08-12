@@ -14,9 +14,9 @@ data:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'oneid',
+            'NAME': '{{ .Values.persistence.mysql.database }}',
             'USER': 'root',
-            'PASSWORD': 'root',
+            'PASSWORD': '{{ .Values.persistence.mysql.rootPassword }}',
             'HOST': 'localhost',
             'PORT': '{{ .Values.service.mysqlDatabase.port }}',
             'OPTIONS': {
@@ -57,6 +57,22 @@ data:
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
+        location /ping/ {
+            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /oauth/ {
+            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
         location = / {
             proxy_pass http://{{ template "oneid.fullname" . }}-fe:{{ .Values.service.feServer.port }}/_/s/oneid.html;
             proxy_set_header Host $host;

@@ -55,7 +55,7 @@ service:
 
 persistence:  # mysql & ldap
   init: false
-  initMysql:
+  mysql:
     rootPassword: root
     database: oneid
   claimName: oneid

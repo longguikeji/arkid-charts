@@ -65,9 +65,9 @@ spec:
           {{- if .Values.persistence.init }}
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: {{ .Values.persistence.initMysql.rootPassword}}
+              value: {{ .Values.persistence.mysql.rootPassword}}
             - name: MYSQL_DATABASE
-              value: {{ .Values.persistence.initMysql.database}}
+              value: {{ .Values.persistence.mysql.database}}
           {{ end }}
           volumeMounts:
             - name: oneid-data
