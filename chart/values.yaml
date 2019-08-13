@@ -58,7 +58,7 @@ persistence:  # mysql & ldap
   mysql:
     rootPassword: root
     database: oneid
-  claimName: oneid
+  claimName: arkid
   storageClass: null
   accessMode: ReadWriteOnce
   size: 8Gi

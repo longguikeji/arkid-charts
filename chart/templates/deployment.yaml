@@ -48,7 +48,7 @@ spec:
           ports:
             - name: http
               containerPort: 8080
-              portocol: TCP
+              protocol: TCP
           args: ["broker", "-t", "http://localhost", "-p", "8080"]
 
         - name: "{{ .Chart.Name }}-{{ .Values.image.redis.name }}"

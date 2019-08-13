@@ -52,7 +52,7 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 假设系统内部没有`cert-managaer`，不启用HTTPS
 
 ```shell
-> helm install --name arkid --set persistence.init=false --set ingress.cert=false --set ingress.tls=false .
+> helm3 install arkid .  --set persistence.init=true --set ingress.cert=false --set ingress.tls=false --set apiServer=""
 
 NAME:   arkid
 LAST DEPLOYED: Mon Aug 12 21:10:32 2019
