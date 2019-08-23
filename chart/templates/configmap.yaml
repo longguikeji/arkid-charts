@@ -25,6 +25,9 @@ data:
             },
         }
     }
+    DOMAIN="{{ .Values.ingress.host.name }}"
+    # PRIVATE_IP="TODO"
+    # PUBLIC_IP="TODO"
     {{ .Values.settingsLocal | indent 4}}
 
   portal.conf: |-
