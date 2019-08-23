@@ -1,2 +1,1 @@
-# arkid-charts
-arkid helm charts, arkos compatible
+chart/README.md
