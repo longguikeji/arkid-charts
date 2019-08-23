@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "oneid.fullname" . }}
+  name: {{ template "arkid.fullname" . }}
   labels:
-    app: {{ template "oneid.name" . }}
-    chart: {{ template "oneid.chart" . }}
+    app: {{ template "arkid.name" . }}
+    chart: {{ template "arkid.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
@@ -35,7 +35,7 @@ data:
         real_ip_header   X-Real-IP;
 
         location /superadmin/ {
-            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port}};
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port}};
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
@@ -43,7 +43,7 @@ data:
         }
 
         location /static/ {
-            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port}};
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port}};
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
@@ -51,14 +51,14 @@ data:
         }
 
         location /siteapi/oneid/ {
-            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
         location /ping/ {
-            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port }}/ping/; 
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}/ping/; 
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
@@ -66,7 +66,7 @@ data:
         }
 
         location /oauth/ {
-            proxy_pass http://{{ template "oneid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
@@ -74,7 +74,7 @@ data:
         }
 
         location = / {
-            proxy_pass http://{{ template "oneid.fullname" . }}-fe:{{ .Values.service.feServer.port }}/_/s/oneid.html;
+            proxy_pass http://{{ template "arkid.fullname" . }}-fe:{{ .Values.service.feServer.port }}/_/s/oneid.html;
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             expires 1m;
@@ -82,7 +82,7 @@ data:
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
         location / {
-            proxy_pass http://{{ template "oneid.fullname" . }}-fe:{{ .Values.service.feServer.port }};
+            proxy_pass http://{{ template "arkid.fullname" . }}-fe:{{ .Values.service.feServer.port }};
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "oneid.fullname" . }}
+  name: {{ include "arkid.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "oneid.name" . }}
-    helm.sh/chart: {{ include "oneid.chart" . }}
+    app.kubernetes.io/name: {{ include "arkid.name" . }}
+    helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "oneid.name" . }}
+      app.kubernetes.io/name: {{ include "arkid.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "oneid.name" . }}
+        app.kubernetes.io/name: {{ include "arkid.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
@@ -70,17 +70,17 @@ spec:
               value: {{ .Values.persistence.mysql.database}}
           {{ end }}
           volumeMounts:
-            - name: oneid-data
+            - name: arkid-data
               mountPath: /var/lib/mysql
               subPath: mysql/data
-            - name: oneid-data
+            - name: arkid-data
               mountPath: /etc/mysql/conf.d
               subPath: mysql/config
 
       volumes:
         - name: settings-local
           configMap:
-            name: {{ template "oneid.fullname" . }}
-        - name: oneid-data
+            name: {{ template "arkid.fullname" . }}
+        - name: arkid-data
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.claimName }}

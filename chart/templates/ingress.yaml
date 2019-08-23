@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "oneid.fullname" . -}}
+{{- $fullName := include "arkid.fullname" . -}}
 {{- $ingressPaths := .Values.ingress.paths -}}
 {{- $domain := .Values.ingress.host.name -}}
 apiVersion: extensions/v1beta1
@@ -7,8 +7,8 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "oneid.name" . }}
-    helm.sh/chart: {{ include "oneid.chart" . }}
+    app.kubernetes.io/name: {{ include "arkid.name" . }}
+    helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.ingress.annotations }}

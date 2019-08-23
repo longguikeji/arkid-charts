@@ -6,8 +6,8 @@ metadata:
   annotations:
     "helm.sh/resource-policy": keep
   labels:
-    app: "{{ include "oneid.fullname" . }}"
-    chart: "{{ include "oneid.chart" . }}"
+    app: "{{ include "arkid.fullname" . }}"
+    chart: "{{ include "arkid.chart" . }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "oneid.fullname" . }}-portal
+  name: {{ include "arkid.fullname" . }}-portal
   labels:
-    app.kubernetes.io/name: "{{ include "oneid.name" . }}-portal"
-    helm.sh/chart: {{ include "oneid.chart" . }}
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-portal"
+    helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: "{{ .Release.Name }}-portal"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "oneid.name" . }}-portal
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-portal
       app.kubernetes.io/instance: {{ .Release.Name }}-portal
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "oneid.name" . }}-portal
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-portal
         app.kubernetes.io/instance: {{ .Release.Name }}-portal
     spec:
       containers:
@@ -34,4 +34,4 @@ spec:
       volumes:
         - name: settings-local
           configMap:
-            name: "{{ template "oneid.fullname" . }}"
+            name: "{{ template "arkid.fullname" . }}"

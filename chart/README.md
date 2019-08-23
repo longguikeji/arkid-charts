@@ -82,7 +82,7 @@ arkid         1        1        1           0          21s
 
 ==> v1beta1/Ingress
 NAME   HOSTS                  ADDRESS  PORTS  AGE
-arkid  oneid.longguikeji.com  80       21s
+arkid  arkid.longguikeji.com  80       21s
 
 ==> v1/Pod(related)
 NAME                           READY  STATUS             RESTARTS  AGE

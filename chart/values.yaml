@@ -57,7 +57,7 @@ persistence:  # mysql
   init: false
   mysql:
     rootPassword: root
-    database: oneid
+    database: arkid
   claimName: arkid
   storageClass: null
   accessMode: ReadWriteOnce
@@ -70,7 +70,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
   host:
-    name: oneid.longguikeji.com
+    name: arkid.longguikeji.com
   tls: true
 
 apiServer: http://ark-apisvr
@@ -81,7 +81,7 @@ settingsLocal: |-
 
   DINGDING_APP_KEY = ''
   DINGDING_APP_SECRET = ''
-  BASE_URL = 'https://oneid.longguikeji.com'
+  BASE_URL = 'https://arkid.longguikeji.com'
 
   EXECUTERS = [    # 注意顺序
     'executer.RDB.RDBExecuter',
