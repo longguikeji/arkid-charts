@@ -26,8 +26,7 @@ data:
         }
     }
     DOMAIN="{{ .Values.ingress.host.name }}"
-    # PRIVATE_IP="TODO"
-    # PUBLIC_IP="TODO"
+    PRIVATE_IP="{{ include "arkid.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local"
     {{ .Values.settingsLocal | indent 4}}
 
   portal.conf: |-
