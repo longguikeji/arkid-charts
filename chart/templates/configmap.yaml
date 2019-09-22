@@ -25,6 +25,8 @@ data:
             },
         }
     }
+    DOMAIN="{{ .Values.ingress.host.name }}"
+    PRIVATE_IP="{{ include "arkid.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local"
     {{ .Values.settingsLocal | indent 4}}
 
   portal.conf: |-
@@ -50,8 +52,8 @@ data:
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
 
-        location /siteapi/oneid/ {
-            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
+        location /siteapi/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/; 
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
@@ -66,7 +68,7 @@ data:
         }
 
         location /oauth/ {
-            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}/siteapi/v1/; 
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}; 
             proxy_set_header Host $host;
             proxy_set_header Arker portal;
             proxy_set_header X-Real-IP $remote_addr;
