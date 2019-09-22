@@ -5,22 +5,22 @@ image:
     name: web-server
     repository: longguikeji/arkid
     tag: "1.0.20190922"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   feServer:
     name: fe
     repository: longguikeji/arkid-fe
     tag: "1.0.20190907"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   webServerBroker:
     name: web-server-broker
     repository: longguikeji/arkid-broker
     tag: "1.0.0"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   portal:
     name: portal
     repository: nginx
     tag: "alpine"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   redis:
     name: redis
     repository: redis
@@ -35,7 +35,7 @@ image:
     name: ldap
     repository: longguikeji/ark-sql-ldap
     tag: 1.0.0
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
 nameOverride: ""
 fullnameOverride: ""
@@ -57,6 +57,15 @@ service:
     ldapsPort: 636
   mysqlDatabase:
     port: 3306
+
+ldapService:
+  type: NodePort
+  ldap:
+    port: 389
+    # nodePort: 30389
+  ldaps:
+    port: 636
+    # nodePort: 30636
 
 persistence:  # mysql
   init: false
