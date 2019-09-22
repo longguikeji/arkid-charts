@@ -8,6 +8,7 @@ metadata:
 spec:
   secretName: {{ .Release.Name }}-crt
   dnsNames:
+    - {{ $domain }}
   tls:
     - {{ $domain }}
   acme:

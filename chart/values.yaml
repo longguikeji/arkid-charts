@@ -4,12 +4,12 @@ image:
   webServer:
     name: web-server
     repository: longguikeji/arkid
-    tag: "1.0.0"
+    tag: "1.0.20190922"
     pullPolicy: Always
   feServer:
     name: fe
     repository: longguikeji/arkid-fe
-    tag: "1.0.0"
+    tag: "1.0.20190907"
     pullPolicy: Always
   webServerBroker:
     name: web-server-broker
@@ -31,6 +31,11 @@ image:
     repository: mysql
     tag: 5.7
     pullPolicy: IfNotPresent
+  ldap:
+    name: ldap
+    repository: longguikeji/ark-sql-ldap
+    tag: 1.0.0
+    pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
@@ -75,6 +80,9 @@ ingress:
 
 apiServer: http://ark-apisvr
 
+ldap:
+  adminPassword: admin
+
 settingsLocal: |-
 
   CONFIG_VERSION = 'longgui-2019-08-12'
@@ -82,6 +90,8 @@ settingsLocal: |-
   DINGDING_APP_KEY = ''
   DINGDING_APP_SECRET = ''
   BASE_URL = 'https://arkid.longguikeji.com'
+
+  INSTALLED_APPS += ['ldap.sql_backend']
 
   EXECUTERS = [    # 注意顺序
     'executer.RDB.RDBExecuter',
