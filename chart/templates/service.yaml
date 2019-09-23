@@ -16,9 +16,11 @@ spec:
       name: http
     # - name: ldap
     #   port: {{ .Values.service.ldap.ldapPort }}
+    #   targetPort: 389
     #   protocol: TCP
     # - name: ldaps
     #   port: {{ .Values.service.ldap.ldapsPort }}
+    #   targetPort: 636
     #   protocol: TCP
     - name: broker
       port: {{ .Values.service.webServerBroker.port }}

@@ -77,6 +77,25 @@ spec:
               mountPath: /etc/mysql/conf.d
               subPath: mysql/config
 
+        - name: "{{ .Chart.Name }}-{{ .Values.image.ldap.name }}"
+          image: "{{ .Values.image.ldap.repository }}:{{ .Values.image.ldap.tag }}"
+          imagePullPolicy: {{ .Values.image.ldap.pullPolicy }}
+          env:
+          - name: SQL_HOST
+            value: "127.0.0.1"
+          - name: SQL_PORT
+            value: "3306"
+          - name: SQL_USER
+            value: "root"
+          - name: SQL_PWD
+            value: "{{ .Values.persistence.mysql.rootPassword}}"
+          - name: LDAP_PASSWORD
+            value: "{{ .Values.ldap.adminPassword }}"
+          - name: SQL_DB
+            value: "{{ .Values.persistence.mysql.database}}"
+          - name: BACKEND
+            value: "sql"
+
       volumes:
         - name: settings-local
           configMap:
