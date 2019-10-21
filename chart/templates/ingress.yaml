@@ -20,7 +20,7 @@ spec:
   tls:
     - hosts:
       - {{ $domain }}
-      secretName: {{ .Release.Name }}-cert
+      secretName: {{ .Release.Name }}-crt
 {{- end }}
   rules:
     - host: {{ $domain }}

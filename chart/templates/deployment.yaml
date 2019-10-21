@@ -9,6 +9,8 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "arkid.name" . }}
@@ -103,3 +105,8 @@ spec:
         - name: arkid-data
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.claimName }}
+
+      {{if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      {{- end }}

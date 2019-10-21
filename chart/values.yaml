@@ -92,6 +92,8 @@ apiServer: http://ark-apisvr
 ldap:
   adminPassword: admin
 
+imagePullSecrets:
+
 settingsLocal: |-
 
   CONFIG_VERSION = 'longgui-2019-08-12'
