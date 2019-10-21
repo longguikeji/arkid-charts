@@ -31,4 +31,9 @@ spec:
           - "{{ .Values.apiServer }}"
           - "-i"
           - "http://{{ include "arkid.fullname" . }}:{{ .Values.service.webServerBroker.port }}"
+
+      {{if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
 {{- end }}
