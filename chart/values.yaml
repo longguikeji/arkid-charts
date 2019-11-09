@@ -60,6 +60,7 @@ service:
 
 ldapService:
   type: NodePort
+  addr: ldap://localhost
   ldap:
     port: 389
     # nodePort: 30389
