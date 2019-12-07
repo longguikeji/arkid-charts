@@ -43,6 +43,9 @@ spec:
             - name: "settings-local"
               mountPath: "/var/oneid/settings_local.py"
               subPath: "settings_local.py"
+            - name: arkid-data
+              mountPath: /var/oneid/upload
+              subPath: be/upload
 
         - name: "{{ .Chart.Name }}-{{ .Values.image.webServerBroker.name }}"
           image: "{{ .Values.image.webServerBroker.repository }}:{{ .Values.image.webServerBroker.tag }}"
