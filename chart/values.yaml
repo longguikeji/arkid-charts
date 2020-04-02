@@ -4,12 +4,12 @@ image:
   webServer:
     name: web-server
     repository: longguikeji/arkid
-    tag: "1.1.1"
+    tag: "1.2.1"
     pullPolicy: IfNotPresent
   feServer:
     name: fe
     repository: longguikeji/arkid-fe
-    tag: "1.1.1"
+    tag: "1.2.0"
     pullPolicy: IfNotPresent
   webServerBroker:
     name: web-server-broker
@@ -24,17 +24,17 @@ image:
   redis:
     name: redis
     repository: redis
-    tag: 5.0.3
+    tag: "5.0.3"
     pullPolicy: IfNotPresent
   mysqlDatabase:
     name: mysql-database
     repository: mysql
-    tag: 5.7
+    tag: "5.7"
     pullPolicy: IfNotPresent
   ldap:
     name: ldap
     repository: longguikeji/ark-sql-ldap
-    tag: 1.0.0
+    tag: "1.2.0"
     pullPolicy: IfNotPresent
 
 nameOverride: ""
