@@ -9,15 +9,13 @@ metadata:
     heritage: {{ .Release.Service }}
 data:
   settings_local.py: |-
-    import pymysql
-    pymysql.install_as_MySQLdb()
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': '{{ .Values.persistence.mysql.database }}',
             'USER': 'root',
             'PASSWORD': '{{ .Values.persistence.mysql.rootPassword }}',
-            'HOST': 'localhost',
+            'HOST': '127.0.0.1',
             'PORT': '{{ .Values.service.mysqlDatabase.port }}',
             'OPTIONS': {
                 'autocommit': True,

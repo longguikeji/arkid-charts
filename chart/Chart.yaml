@@ -1,8 +1,8 @@
 apiVersion: v1
-appVersion: "1.0"
+appVersion: "1.2.1"
 description: ArkID is an enterprise SSO solutions, it supports LDAP, OpenID, SAML, OAuth and more
 name: arkid
-version: 1.1.1
+version: 1.2.1
 maintainers:
 - email: yanghan@longguikeji.com
   name: yanghan
