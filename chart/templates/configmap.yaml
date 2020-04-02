@@ -15,7 +15,7 @@ data:
             'NAME': '{{ .Values.persistence.mysql.database }}',
             'USER': 'root',
             'PASSWORD': '{{ .Values.persistence.mysql.rootPassword }}',
-            'HOST': 'localhost',
+            'HOST': '127.0.0.1',
             'PORT': '{{ .Values.service.mysqlDatabase.port }}',
             'OPTIONS': {
                 'autocommit': True,
