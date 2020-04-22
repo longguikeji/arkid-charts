@@ -46,6 +46,9 @@ spec:
             - name: arkid-data
               mountPath: /var/oneid/upload
               subPath: be/upload
+            - name: arkid-data
+              mountPath: /var/oneid/plugins
+              subPath: be/plugins
 
         - name: "{{ .Chart.Name }}-{{ .Values.image.webServerBroker.name }}"
           image: "{{ .Values.image.webServerBroker.repository }}:{{ .Values.image.webServerBroker.tag }}"
