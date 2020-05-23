@@ -21,6 +21,16 @@ spec:
         app.kubernetes.io/name: {{ include "arkid.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      initContainers:
+      - image: busybox
+        command:
+        - sh
+        - -c
+        - echo 65535 > /proc/sys/net/core/somaxconn
+        imagePullPolicy: Always
+        name: setsysctl
+        securityContext:
+          privileged: true
       containers:
         - name: "{{ .Chart.Name }}-{{ .Values.image.webServer.name }}"
           image: "{{ .Values.image.webServer.repository }}:{{ .Values.image.webServer.tag }}"
