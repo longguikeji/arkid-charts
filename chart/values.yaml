@@ -4,7 +4,7 @@ image:
   webServer:
     name: web-server
     repository: longguikeji/arkid
-    tag: "1.3.5"
+    tag: "1.3.6"
     pullPolicy: IfNotPresent
   feServer:
     name: fe
