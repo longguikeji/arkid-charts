@@ -26,6 +26,18 @@ spec:
       port: {{ .Values.service.webServerBroker.port }}
       targetPort: 8080
       protocol: TCP
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: 6379
+    - name: ldap
+      port: 389
+      protocol: TCP
+      targetPort: 389
 
   selector:
     app.kubernetes.io/name: {{ include "arkid.name" . }}
