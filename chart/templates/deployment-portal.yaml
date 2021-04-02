@@ -1,3 +1,24 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "arkid.fullname" . }}-portal"
+  labels:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-portal"
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}-portal"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.portal.svcType }}
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-portal"
+    app.kubernetes.io/instance: "{{ .Release.Name }}-portal"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,7 +29,6 @@ metadata:
     app.kubernetes.io/instance: "{{ .Release.Name }}-portal"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "arkid.name" . }}-portal
@@ -20,17 +40,16 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}-portal
     spec:
       containers:
-        - name: "{{ .Chart.Name }}-{{ .Values.image.portal.name }}"
-          image: "{{ .Values.image.portal.repository}}:{{ .Values.image.portal.tag }}"
-          imagePullPolicy: {{ .Values.image.portal.pullPolicy }}
+        - name: "{{ .Chart.Name }}-portal"
+          image: "{{ .Values.portal.image}}"
+          imagePullPolicy: {{ .Values.portal.pullPolicy }}
+          env:
+            - name: TZ
+              value: 'Asia/Shanghai'
           volumeMounts:
             - name: settings-local
               mountPath: "/etc/nginx/conf.d/default.conf"
-              subPath: "portal.conf"
-          command:
-            - "nginx"
-            - "-g"
-            - "daemon off;"
+              subPath: "default.conf"
       volumes:
         - name: settings-local
           configMap:

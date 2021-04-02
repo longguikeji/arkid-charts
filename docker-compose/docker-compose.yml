@@ -38,7 +38,7 @@ services:
       - ${WORKSPACE}/be:/data
 
   fe:
-    image: arkid-fe:v2
+    image: harbor.longguikeji.com/ark-releases/arkid-fe:v2dev-1-7150916
     container_name: ${INSTANCE}-fe
     restart: always
     networks:

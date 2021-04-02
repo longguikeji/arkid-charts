@@ -14,5 +14,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args:  ['{{ include "arkid.fullname" . }}:{{ .Values.service.port }}']
+      args:  ['{{ include "arkid.fullname" . }}-be:80']
   restartPolicy: Never

@@ -1,126 +1,84 @@
-replicaCount: 1
-
-image:
-  webServer:
-    name: web-server
-    repository: longguikeji/arkid
-    tag: "1.4.0"
-    pullPolicy: IfNotPresent
-  feServer:
-    name: fe
-    repository: longguikeji/arkid-fe
-    tag: "1.3.2"
-    pullPolicy: IfNotPresent
-  webServerBroker:
-    name: web-server-broker
-    repository: longguikeji/arkid-broker
-    tag: "1.0.0"
-    pullPolicy: IfNotPresent
-  portal:
-    name: portal
-    repository: nginx
-    tag: "alpine"
-    pullPolicy: IfNotPresent
-  redis:
-    name: redis
-    repository: redis
-    tag: "5.0.3"
-    pullPolicy: IfNotPresent
-  mysqlDatabase:
-    name: mysql-database
-    repository: mysql
-    tag: "5.7"
-    pullPolicy: IfNotPresent
-  ldap:
-    name: ldap
-    repository: longguikeji/ark-sql-ldap
-    tag: "1.2.0"
-    pullPolicy: IfNotPresent
-
-nameOverride: ""
-fullnameOverride: ""
-
-apiServer: http://ark-apisvr
-
-service:
-  type: ClusterIP
-  feServer:
-    port: 80
-  webServer:
-    port: 80
-  webServerBroker:
-    port: 8080
-  portal:
-    port: 80
-  ldap:
-    ldapPort: 389
-    ldapsPort: 636
-  mysqlDatabase:
-    port: 3306
-
-ldapService:
-  type: NodePort
-  addr: ldap://localhost
-  ldap:
-    port: 389
-    # nodePort: 30389
-  ldaps:
-    port: 636
-    # nodePort: 30636
-
+# 持久化
 persistence:  # mysql
   init: false
-  mysql:
-    rootPassword: root
-    database: arkid
   claimName: arkid
   storageClass: null
   accessMode: ReadWriteOnce
   size: 8Gi
 
+
+mysql:
+  image: mysql:5.7
+  pullPolicy: IfNotPresent
+  rootPassword: root
+  database: arkid
+
+redis:
+  image: redis:5.0.3
+  pullPolicy: IfNotPresent
+
+ldap:
+  image: longguikeji/ark-sql-ldap:1.3.0
+  pullPolicy: IfNotPresent
+  adminPassword: admin
+  ## service 的类型，ClusterIP, NodePort, LoadBalancer
+  svcType: NodePort
+  # 当svcType为NodePort时有效，ldap 636暴露到nodePort的端口, 留空则会随机挑选一个端口
+  nodePort636:
+  # 当svcType为NodePort时有效，ldap 389暴露到nodePort的端口, 留空则会随机挑选一个端口
+  nodePort389:
+be:
+  image: longguikeji/arkid:2.0.0-dev
+  pullPolicy: IfNotPresent
+  ## service 的类型，ClusterIP, NodePort, LoadBalancer
+  svcType: ClusterIP
+  ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
+  resources: {}
+    
+
+fe:
+  image: longguikeji/arkid-fe:2.0.0-dev
+  pullPolicy: IfNotPresent
+  ## service 的类型，ClusterIP, NodePort, LoadBalancer
+  svcType: ClusterIP
+
+webServerBroker:
+  ## 如果单独部署arkid，那么arkOS留空, webServerBroker 下的参数都不用填了；
+  ## 否则填写arkOS的api地址：例如：http://ark-apisvr
+  arkOS:
+  name: web-server-broker
+  image: longguikeji/arkid-broker:1.0.0
+  pullPolicy: IfNotPresent
+  port: 8080
+
+portal:
+  image: nginx:alpine
+  pullPolicy: IfNotPresent
+  ## service 的类型，ClusterIP, NodePort, LoadBalancer
+  svcType: ClusterIP
+
+
+nameOverride: ""
+fullnameOverride: ""
+
 ingress:
   enabled: true
-  cert: true
+  # cert-manager 
+  cert: false
   annotations:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
   host:
+    # 需要DNS解析到ingress的ip
+    # 本地调试就在 /etc/hosts里配置一下
     name: arkid.longguikeji.com
+  # 如果没有 cert-manager，tls为true则会自动生成一个secret
   tls: true
 
-apiServer: http://ark-apisvr
-
-ldap:
-  adminPassword: admin
 
 imagePullSecrets:
 
 settingsLocal: |-
-
-  CONFIG_VERSION = 'longgui-2019-08-12'
-
-  DINGDING_APP_KEY = ''
-  DINGDING_APP_SECRET = ''
+  # CONFIG_VERSION = 'longgui-2021-04-01'
   BASE_URL = 'https://arkid.longguikeji.com'
 
-  INSTALLED_APPS += ['ldap.sql_backend']
-
-  EXECUTERS = [    # 注意顺序
-    'executer.RDB.RDBExecuter',
-    'executer.log.rdb.RDBLogExecuter',
-    'executer.cache.default.CacheExecuter',
-  ]
-
-  SMS_LIFESPAN = datetime.timedelta(seconds=120)
-  SMS_ALIYUN_REGION = 'cn-hangzhou'
-  SMS_ALIYUN_PRODUCT_NAME = 'Dysmsapi'
-  SMS_ALIYUN_DOMAIN = 'dysmsapi.aliyuncs.com'
-  SMS_ALIYUN_ACCESS_KEY_ID = ''
-  SMS_ALIYUN_ACCESS_KEY_SECRET = ''
-  SMS_ALIYUN_TEMPLATE_CODE = ''
-  SMS_ALIYUN_SIGNATURE = '龙归科技'
-
-  MINIO_ENDPOINT = 'minio.longguikeji.com'
-  MINIO_ACCESS_KEY = ''
-  MINIO_SECRET_KEY = ''
-  MINIO_SECURE = True

@@ -1,4 +1,4 @@
-{{- if .Values.apiServer }}
+{{- if .Values.webServerBroker.arkOS }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -23,15 +23,14 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: {{ .Chart.Name }}-register
-        image: "{{ .Values.image.webServerBroker.repository}}:{{ .Values.image.webServerBroker.tag }}"
-        imagePullPolicy: {{ .Values.image.webServer.pullPolicy }}
+        image: "{{ .Values.webServerBroker.image}}"
+        imagePullPolicy: {{ .Values.webServerBroker.pullPolicy }}
         args:
           - "register"
           - "-t"
-          - "{{ .Values.apiServer }}"
+          - "{{ .Values.webServerBroker.arkOS }}"
           - "-i"
-          - "http://{{ include "arkid.fullname" . }}:{{ .Values.service.webServerBroker.port }}"
-
+          - "http://{{ include "arkid.fullname" . }}-be:8080"
       {{if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
