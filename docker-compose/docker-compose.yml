@@ -8,7 +8,7 @@ services:
     networks:
       - arkid
     ports:
-      - ${HTTP_PORT}:80
+      - 8989:80
     depends_on:
       - be
       - fe
@@ -16,20 +16,29 @@ services:
       - ${WORKSPACE}/portal.conf:/etc/nginx/conf.d/default.conf
 
   be:
-    image: longguikeji/arkid:1.4.4
+    image: harbor.longguikeji.com/ark-releases/arkid:v2dev-18-5db9229
     container_name: ${INSTANCE}-be
     sysctls:
       - net.core.somaxconn=65535
     restart: always
+    environment:
+      - MYSQL_HOST=${INSTANCE}-db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=arkid
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - REDIS_HOST=${INSTANCE}-redis
     networks:
       - arkid
     depends_on:
       - db
     volumes:
+      - ${WORKSPACE}/settings_local.py:/var/oneid/settings_local.py
       - ${WORKSPACE}/be:/data
 
   fe:
-    image: longguikeji/arkid-fe:1.4.2
+    image: arkid-fe:v2
     container_name: ${INSTANCE}-fe
     restart: always
     networks:
@@ -42,8 +51,11 @@ services:
     networks:
       - arkid
     environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=arkid
-      - MYSQL_ROOT_PASSWORD=${SQL_PWD}
     volumes:
       - ${WORKSPACE}/db/data:/var/lib/mysql
       - ${WORKSPACE}/db/config:/etc/mysql/conf.d
@@ -64,9 +76,9 @@ services:
     environment:
       - SQL_HOST=${INSTANCE}-db
       - SQL_PORT=3306
-      - SQL_USER=root
-      - SQL_PWD=${SQL_PWD}
-      - LDAP_PASSWORD=${LDAP_PASSWORD}
+      - SQL_USER=${MYSQL_USER}
+      - SQL_PWD=${MYSQL_PASSWORD}
+      - LDAP_PASSWORD=${LDAP_ADMIN_PASSWORD}
       - SQL_DB=arkid
       - BACKEND=sql
       - SLAPD_NOFILE_SOFT=10000
