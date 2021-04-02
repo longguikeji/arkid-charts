@@ -74,7 +74,7 @@ spec:
       volumes:
         - name: arkid-data
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.claimName }}
+            claimName: "{{ .Values.persistence.claimName }}-mysql"
       {{if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

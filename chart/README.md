@@ -5,7 +5,7 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 ## 项目说明
 
 - [arkid-frontend](https://github.com/longguikeji/arkid-frontend): 前端代码
-- [arkid-core](https://github.com/longguikeji/arkid-core): 后端核心以及其他
+- [arkid](https://github.com/longguikeji/arkid-core): 后端核心以及其他
 - [arkid-broker](https://github.com/longguikeji/arkid-broker): 一账通部署在ArkOS中的服务Broker
 
 ## 功能特性
@@ -47,73 +47,41 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 - [接口文档](https://oneid1.docs.apiary.io/#)
 
 
-### QuickStart
+## 部署方式
 
-假设系统内部没有`cert-managaer`，不启用HTTPS
-
+### 1、docker-compose 方式部署
 ```shell
-helm install arkid . --set persistence.init=true --set ingress.tls=false
+## arkid v2.0
+git clone --branch v2-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
+
+cd arkid-charts/docker-compose
+
+docker-compose up -d
 ```
 
+### 2、helm/charts 方式部署
 ```shell
-> helm install arkid .  --set persistence.init=true --set ingress.cert=false --set ingress.tls=false --set apiServer=""
+## arkid v2.0
+git clone --branch v2-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
 
-NAME:   arkid
-LAST DEPLOYED: Mon Aug 12 21:10:32 2019
-NAMESPACE: default
-STATUS: DEPLOYED
+cd arkid-charts/chart
 
-RESOURCES:
-==> v1/ConfigMap
-NAME   DATA  AGE
-arkid  2     21s
-
-==> v1/PersistentVolumeClaim
-NAME   STATUS  VOLUME                                    CAPACITY  ACCESS MODES  STORAGECLASS     AGE
-arkid  Bound   pvc-90aa88a0-bd02-11e9-ae44-00163e009f85  8Gi       RWO           rook-ceph-block  21s
-
-==> v1/Service
-NAME          TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)          AGE
-arkid-fe      ClusterIP  10.103.188.115  <none>       80/TCP           21s
-arkid-portal  ClusterIP  10.99.233.163   <none>       80/TCP           21s
-arkid         ClusterIP  10.109.113.112  <none>       80/TCP,8080/TCP  21s
-
-==> v1/Deployment
-NAME          DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
-arkid-fe      1        1        1           1          21s
-arkid-portal  1        1        1           1          21s
-arkid         1        1        1           0          21s
-
-==> v1beta1/Ingress
-NAME   HOSTS                  ADDRESS  PORTS  AGE
-arkid  arkid.longguikeji.com  80       21s
-
-==> v1/Pod(related)
-NAME                           READY  STATUS             RESTARTS  AGE
-arkid-fe-597c8f6b5b-zgbjk      1/1    Running            0         21s
-arkid-portal-8644894767-j8s4k  1/1    Running            0         21s
-arkid-ff5946498-n456z          0/4    ContainerCreating  0         21s
-```
-arkid 可能因为依赖的数据库未完全启动，而进行几次重启，请稍作等待，直至达到 Running。
-
-```shell
-> kubectl port-forward arkid-portal-8644894767-j8s4k  10080:80
-Forwarding from 127.0.0.1:10080 -> 80
-Handling connection for 10080
+helm install arkidv2 . \
+--set persistence.init=true \
+--set ingress.cert=false \
+--set ingress.tls=false \
+--set ingress.host.name=arkid.yourcompany.com
 ```
 
+
 ```shell
-> curl http://127.0.0.1:10080/ping
-pong
+> kubectl port-forward svc/arkid-portal  8989:80
+Forwarding from 127.0.0.1:8989 -> 80
+Handling connection for 8989
 ```
 
-浏览器打开http://127.0.0.1:10080，既可用默认管理员账号 admin / admin 探索ArkID完整功能。
+浏览器打开http://127.0.0.1:8989 探索ArkID 2.0 的完整功能。
 
-![image](https://raw.githubusercontent.com/skoogi/charts/assets/assets/login.png)
-
-![image](https://raw.githubusercontent.com/skoogi/charts/assets/assets/ucenter.png)
-
-![image](https://raw.githubusercontent.com/skoogi/charts/assets/assets/admin.png)
 
 ## Contact
 
