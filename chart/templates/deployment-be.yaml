@@ -84,8 +84,11 @@ spec:
             {{ toYaml .Values.be.resources | nindent 12 }}
           volumeMounts:
             - name: "settings-local"
-              mountPath: "/var/oneid/settings_local.py"
+              mountPath: "/var/arkid/settings_local.py"
               subPath: "settings_local.py"
+            - name: "settings-local"
+              mountPath: "/var/arkid/arkid.local.toml"
+              subPath: "arkid.local.toml"
             - name: arkid-data-be
               mountPath: /data
               subPath: be

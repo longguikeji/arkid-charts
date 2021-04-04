@@ -34,7 +34,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ${WORKSPACE}/settings_local.py:/var/oneid/settings_local.py
+      - ${WORKSPACE}/settings_local.py:/var/arkid/settings_local.py
+      - ${WORKSPACE}/arkid.local.toml:/var/arkid/arkid.local.toml
       - ${WORKSPACE}/be:/data
 
   fe:
