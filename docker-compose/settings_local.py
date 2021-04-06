@@ -6,21 +6,21 @@ MYSQLDATABASE = os.getenv("MYSQL_DATABASE", "arkid")
 MYSQLUSER = os.getenv("MYSQL_USER", "root")
 MYSQLPASSWORD = os.getenv("MYSQL_PASSWORD", "root")
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': MYSQLDATABASE,
-#        'HOST': MYSQLHOST,    # {.env.INSTANCE}-db
-#        'PORT': MYSQLPORT,
-#        'USER': MYSQLUSER,
-#        'PASSWORD': MYSQLPASSWORD,    # {.env.SQL_PWD}
-#        'OPTIONS': {
-#            'autocommit': True,
-#            'init_command': 'SET default_storage_engine=InnoDB',
-#            'charset': 'utf8mb4',
-#        },
-#    }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': MYSQLDATABASE,
+        'HOST': MYSQLHOST,    # {.env.INSTANCE}-db
+        'PORT': MYSQLPORT,
+        'USER': MYSQLUSER,
+        'PASSWORD': MYSQLPASSWORD,    # {.env.SQL_PWD}
+        'OPTIONS': {
+            'autocommit': True,
+            'init_command': 'SET default_storage_engine=InnoDB',
+            'charset': 'utf8mb4',
+        },
+    }
+}
 
 # Redis cache
 REDISHOST = os.getenv("REDIS_HOST", "localhost")
