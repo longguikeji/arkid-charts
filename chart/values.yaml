@@ -28,7 +28,7 @@ ldap:
   # 当svcType为NodePort时有效，ldap 389暴露到nodePort的端口, 留空则会随机挑选一个端口
   nodePort389:
 be:
-  image: longguikeji/arkid:2.0.0-dev
+  image: longguikeji/arkid:v2dev
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: ClusterIP
@@ -37,7 +37,7 @@ be:
     
 
 fe:
-  image: longguikeji/arkid-fe:2.0.0-dev
+  image: longguikeji/arkid-fe:v2dev
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: ClusterIP

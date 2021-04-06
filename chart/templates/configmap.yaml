@@ -10,21 +10,21 @@ metadata:
 data:
   settings_local.py: |-
     # mysql database
-    #DATABASES = {
-    #    'default': {
-    #        'ENGINE': 'django.db.backends.mysql',
-    #        'NAME': '{{ .Values.mysql.database }}',
-    #        'USER': 'root',
-    #        'PASSWORD': '{{ .Values.mysql.rootPassword }}',
-    #        'HOST': '{{ include "arkid.fullname" . }}-mysql',
-    #        'PORT': 3306,
-    #        'OPTIONS': {
-    #            'autocommit': True,
-    #            'init_command': 'SET default_storage_engine=InnoDB',
-    #            'charset': 'utf8mb4',
-    #        },
-    #    }
-    #}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': '{{ .Values.mysql.database }}',
+            'USER': 'root',
+            'PASSWORD': '{{ .Values.mysql.rootPassword }}',
+            'HOST': '{{ include "arkid.fullname" . }}-mysql',
+            'PORT': 3306,
+            'OPTIONS': {
+                'autocommit': True,
+                'init_command': 'SET default_storage_engine=InnoDB',
+                'charset': 'utf8mb4',
+            },
+        }
+    }
     # Redis cache
     REDIS_CONFIG = {
         'HOST': '{{ include "arkid.fullname" . }}-redis',
