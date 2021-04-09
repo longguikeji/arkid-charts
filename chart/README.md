@@ -5,48 +5,7 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 ## 项目说明
 
 - [arkid-frontend](https://github.com/longguikeji/arkid-frontend): 前端代码
-- [arkid](https://github.com/longguikeji/arkid-core): 后端核心以及其他
-- [arkid-broker](https://github.com/longguikeji/arkid-broker): 一账通部署在ArkOS中的服务Broker
-
-## 功能特性
-
-### 兼容各种常见协议, 让每个应用都可以连接
-
-1. LDAP
-2. OAuth
-3. OpenID(即将开放)
-4. SAML(即将开放)
-5. HTTP API
-
-### 丰富的账号与分组管理
-
-1. 灵活高效的管理企业内部账号与分组
-2. 支持一键钉钉导入
-
-### 完备的权限管理
-
-细粒度的权限管理，让企业没有管理不到的权限
-
-1. 账号权限
-2. 分组权限
-3. 应用白名单，黑名单
-4. 应用内权限
-
-### 工作台(Workspace)
-
-每位员工均拥有自己的工作台，一键访问业务系统
-
-### 自定义登陆UI
-
-名称、LOGO、主题色，让登陆页面彰显企业文化
-
-
-
-## 文档
-
-- [接口文档](https://oneid1.docs.apiary.io/#)
-
-
+- [arkid](https://github.com/longguikeji/arkid): 后端代码
 ## 部署方式
 
 ### 1、docker-compose 方式部署
@@ -60,6 +19,14 @@ docker-compose up -d
 ```
 
 ### 2、helm/charts 方式部署
+
+#### Prerequisites
+
+- Kubernetes 1.12+
+- Helm 3.1.0
+- PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
+
 ```shell
 ## arkid v2.0
 git clone --branch v2-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
@@ -83,6 +50,66 @@ Handling connection for 8989
 浏览器打开http://127.0.0.1:8989 探索ArkID 2.0 的完整功能。
 
 
-## Contact
 
-- [Website](https://www.longguikeji.com)
+#### 公共配置
+| NAME                     | Description                                            | DEFAULT VALUE |
+| ------------------------ | ------------------------------------------------------ | ------------- |
+| imagePullSecrets         | 拉取镜像的secret名字                                   | nil           |
+| persistence.init         | 是否新创建pvc，如果设置为false则claimName的pvc必须存在 | true          |
+| persistence.storageClass | storageclass名字                                       | nil           |
+| persistence.accessMode   | pvc访问模式                                            | ReadWriteOnce |
+| persistence.size         | 默认8GB                                                | 8Gi           |
+
+#### arkid配置
+
+| NAME                  | DESCRIPTION          | DEFAULT VALUE                      |
+| --------------------- | -------------------- | ---------------------------------- |
+| fe.image              | arkid前端的镜像      | longguikeji/arkid-fe:v2dev         |
+| fe.pullPolicy         | IfNotPresent, Always | IfNotPresent                       |
+| fe.resources.requests | arkid前端的requests  | {"cpu": "800m","memory": "1024Mi"} |
+| fe.resources.limits   | arkid前端的limits    | {}                                 |
+| be.image              | arkid后端的镜像      | longguikeji/arkid:v2dev            |
+| be.pullPolicy         |                      |                                    |
+| be.resources.requests | arkid后端的requests  | {"cpu": "800m","memory": "1024Mi"} |
+| be.resources.limits   | arkid后端的limits    | {}                                 |
+
+
+
+
+#### mysql数据库配置
+
+| NAME                     | Description                                            | DEFAULT VALUE |
+| ------------------------ | ------------------------------------------------------ | ------------- |
+| mysql.enabled             | true会部署一个mysql，如果是false则需要设置externalDatabase下的配置 | true          |
+| mysql.image               | mysql镜像                                              | mysql:5.7     |
+| mysql.pullPolicy          | IfNotPresent, Always                            | IfNotPresent  |
+| mysql.rootPassword        | root密码                                               | root          |
+| mysql.database            | db名字                                                 | arkid         |
+| externalDatabase.host     | 外部mysql数据库的host                                  | ""            |
+| externalDatabase.port     | 外部mysql数据库的port                                  | 3306          |
+| externalDatabase.database | 外部mysql数据库的库名                                  | ""            |
+| externalDatabase.user     | 外部mysql数据库的user                                  | ""            |
+| externalDatabase.password | 外部mysql数据库的password                              | ""            |
+
+#### redis配置
+
+| NaME               | Description                                                  | DEFAULT VALUE |
+| ------------------ | ------------------------------------------------------------ | ------------- |
+| redis.enabled      | true会部署一个redis，如果是false则需要设置externalRedis下的配置 | true          |
+| redis.image        | redis镜像                                                    | redis:5.0.3   |
+| redis.pullPolicy   | IfNotPresent, Always                                         | IfNotPresent  |
+| externalRedis.host | 外部redis的host                                              | ""            |
+| externalRedis.port | 外部redis的port                                              | 6379          |
+| externalRedis.db   | 外部redis的db                                                | 0             |
+
+#### ingress配置
+
+| name                | DEscription                                                  | default value                                                |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ingress.enabled     | 添加ingress记录                                              | true                                                         |
+| ingress.cert        | 使用cert-manager生成证书                                     | false                                                        |
+| ingress.annotations | ingress的注释                                                | {"kubernetes.io/ingress.class": "nginx","certmanager.k8s.io/cluster-issuer": "letsencrypt-prod"} |
+| ingress.host.name   | ingress记录的域名                                            | ""                                                           |
+| ingress.tls         | 如果没有 cert-manager，tls为true则helm会生成一个自签名的证书存到secret | false                                                        |
+
+

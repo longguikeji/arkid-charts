@@ -1,10 +1,11 @@
+{{- if .Values.mysql.enabled -}}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ include "arkid.fullname" . }}-mysql"
+  name: "{{ include "arkid.mysql.fullname" . }}"
   labels:
-    app.kubernetes.io/name: "{{ include "arkid.name" . }}-mysql"
+    app.kubernetes.io/name: "{{ include "arkid.mysql.fullname" . }}"
     helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -15,15 +16,15 @@ spec:
       protocol: TCP
       name: tcp3306
   selector:
-    app.kubernetes.io/name: "{{ include "arkid.name" . }}-mysql"
+    app.kubernetes.io/name: "{{ include "arkid.mysql.fullname" . }}"
     app.kubernetes.io/instance: {{ .Release.Name }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ include "arkid.fullname" . }}-mysql"
+  name: "{{ include "arkid.mysql.fullname" . }}"
   labels:
-    app.kubernetes.io/name: "{{ include "arkid.name" . }}-mysql"
+    app.kubernetes.io/name: "{{ include "arkid.mysql.fullname" . }}"
     helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -32,12 +33,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: "{{ include "arkid.name" . }}-mysql"
+      app.kubernetes.io/name: "{{ include "arkid.mysql.fullname" . }}"
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: "{{ include "arkid.name" . }}-mysql"
+        app.kubernetes.io/name: "{{ include "arkid.mysql.fullname" . }}"
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       initContainers:
@@ -51,7 +52,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-        - name: "{{ .Release.Name }}-mysql"
+        - name: "{{ include "arkid.mysql.fullname" . }}"
           image: "{{ .Values.mysql.image }}"
           imagePullPolicy: {{ .Values.mysql.pullPolicy }}
           args:
@@ -74,8 +75,9 @@ spec:
       volumes:
         - name: arkid-data
           persistentVolumeClaim:
-            claimName: "{{ .Values.persistence.claimName }}-mysql"
+            claimName: "{{ include "arkid.fullname" . }}-mysql"
       {{if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
       {{- end }}
+{{- end -}}

@@ -1,10 +1,11 @@
+{{- if .Values.redis.enabled }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "arkid.fullname" . }}-redis
+  name: {{ include "arkid.redis.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "arkid.name" . }}-redis
+    app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
     helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -15,15 +16,15 @@ spec:
       protocol: TCP
       name: tcp6379
   selector:
-    app.kubernetes.io/name: {{ include "arkid.name" . }}-redis
+    app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "arkid.fullname" . }}-redis
+  name: {{ include "arkid.redis.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "arkid.name" . }}-redis
+    app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
     helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -32,12 +33,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "arkid.name" . }}-redis
+      app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "arkid.name" . }}-redis
+        app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       initContainers:
@@ -51,7 +52,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-        - name: "{{ .Chart.Name }}-redis"
+        - name: {{ include "arkid.redis.fullname" . }}
           image: "{{ .Values.redis.image }}"
           imagePullPolicy: {{ .Values.redis.pullPolicy }}
           env:
@@ -61,3 +62,4 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
       {{- end }}
+{{- end }}

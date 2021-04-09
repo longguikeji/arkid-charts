@@ -13,11 +13,11 @@ data:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': '{{ .Values.mysql.database }}',
-            'USER': 'root',
-            'PASSWORD': '{{ .Values.mysql.rootPassword }}',
-            'HOST': '{{ include "arkid.fullname" . }}-mysql',
-            'PORT': 3306,
+            'NAME': '{{ include "arkid.databaseName" . }}',
+            'USER': '{{ include "arkid.databaseUser" . }}',
+            'PASSWORD': '{{ include "arkid.databasePassword" . }}',
+            'HOST': '{{ include "arkid.databaseHost" . }}',
+            'PORT': '{{ include "arkid.databasePort" . }}',
             'OPTIONS': {
                 'autocommit': True,
                 'init_command': 'SET default_storage_engine=InnoDB',
@@ -27,9 +27,9 @@ data:
     }
     # Redis cache
     REDIS_CONFIG = {
-        'HOST': '{{ include "arkid.fullname" . }}-redis',
-        'PORT': 6379,
-        'DB': 0,
+        'HOST': '{{ include "arkid.redisHost" . }}',
+        'PORT': {{ include "arkid.redisPort" . }},
+        'DB': {{ include "arkid.redisDB" . }},
         'PASSWORD': None,
     }
 
@@ -39,23 +39,10 @@ data:
                 REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'], REDIS_CONFIG['DB'])
 
 
-    # CACHES = {
-    #     "default": {
-    #         "BACKEND": "django_redis.cache.RedisCache",
-    #         "LOCATION": REDIS_URL,
-    #         "TIMEOUT": 60 * 60 * 24 * 3,
-    #         "OPTIONS": {
-    #             "MAX_ENTRIES": None,
-    #             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-    #         }
-    #     }
-    # }
-
     # CELERY
     CELERY_BROKER_URL = REDIS_URL
     DOMAIN="{{ .Values.ingress.host.name }}"
     PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
-    {{ .Values.settingsLocal | indent 4}}
 
   arkid.local.toml: |-
     name = "demo arkid"
@@ -86,9 +73,9 @@ data:
 
         [extension.redis_cache]
         enabled = 0
-        host = 'localhost'
-        port = 6379
-        db = 0
+        host = '{{ include "arkid.redisHost" . }}'
+        port = {{ include "arkid.redisPort" . }}
+        db = {{ include "arkid.redisDB" . }}
 
         [extension.feishu]
         enabled = 1

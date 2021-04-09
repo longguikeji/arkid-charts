@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  type: {{ .Values.be.svcType }}
+  type: ClusterIP
   ports:
     - port: 80
       targetPort: 80
@@ -55,20 +55,24 @@ spec:
         name: setsysctl
         securityContext:
           privileged: true
+      {{- if .Values.redis.enabled }}
       - command:
           - /bin/sh
           - '-c'
-          - "until nc -z -w 2 {{ include "arkid.fullname" . }}-redis 6379 && echo {{ include "arkid.fullname" . }}-redis ok; do sleep 2; done;"
+          - "until nc -z -w 2 {{ include "arkid.redis.fullname" . }} 6379 && echo {{ include "arkid.redis.fullname" . }} ok; do sleep 2; done;"
         image: busybox
         imagePullPolicy: IfNotPresent
         name: check-redis
+      {{- end }}
+      {{- if .Values.mysql.enabled }}
       - command:
           - /bin/sh
           - '-c'
-          - "until nc -z -w 2 {{ include "arkid.fullname" . }}-mysql 3306 && echo {{ include "arkid.fullname" . }}-mysql ok; do sleep 2; done;"
+          - "until nc -z -w 2 {{ include "arkid.mysql.fullname" . }} 3306 && echo {{ include "arkid.mysql.fullname" . }} ok; do sleep 2; done;"
         image: busybox
         imagePullPolicy: IfNotPresent
         name: check-mysql
+      {{- end }}
       containers:
         - name: "{{ .Chart.Name }}-be"
           image: "{{ .Values.be.image }}"
@@ -80,8 +84,7 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          resources:
-            {{ toYaml .Values.be.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: "settings-local"
               mountPath: "/var/arkid/settings_local.py"
@@ -98,7 +101,7 @@ spec:
             name: {{ template "arkid.fullname" . }}
         - name: arkid-data-be
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.claimName }}
+            claimName: "{{ include "arkid.fullname" . }}-mysql"
       {{if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

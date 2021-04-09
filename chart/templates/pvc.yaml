@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.persistence.claimName }}
+  name: "{{ include "arkid.fullname" . }}"
   annotations:
     "helm.sh/resource-policy": keep
   labels:

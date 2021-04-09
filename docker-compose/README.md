@@ -1,10 +1,16 @@
 # run ArkID by docker-compose
 
-1. 按提示修改 .env 文件、settings_local.py 文件
+### docker-compose 方式部署
+```shell
+## arkid v2.0
+git clone --branch v2-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
 
-2. $> docker-compose up -d
+cd arkid-charts/docker-compose
 
-3. 打开 http://localhost:8989 (具体端口视 .env 中 HTTP_PORT 而定)，以内置账号 admin / admin 登录。
+# 1. 按提示修改 .env 文件、settings_local.py 文件
 
+# 2. $> docker-compose up -d
 
-TODO: 连接mysql报错，暂时用 sqlite
+# 3. 打开 http://localhost:8989 (具体端口视 .env 中 HTTP_PORT 而定)，以内置账号 admin / admin 登录。
+
+```
