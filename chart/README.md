@@ -17,6 +17,7 @@ cd arkid-charts/docker-compose
 
 docker-compose up -d
 ```
+浏览器打开http://127.0.0.1:8989 探索ArkID 2.0 的完整功能。
 
 ### 2、helm/charts 方式部署
 
