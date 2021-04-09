@@ -58,6 +58,7 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          resources: {{- toYaml .Values.fe.resources | nindent 12 }}
       {{if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

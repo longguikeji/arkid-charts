@@ -48,7 +48,7 @@ be:
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
-    requests: {"cpu": "800m","memory": "1024Mi"}
+    requests: {"cpu": "300m","memory": "1024Mi"}
 
 fe:
   image: longguikeji/arkid-fe:v2dev
@@ -56,7 +56,7 @@ fe:
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
-    requests: {"cpu": "800m","memory": "1024Mi"}
+    requests: {"cpu": "200m","memory": "1024Mi"}
 
 # webServerBroker:
 #   ## 如果单独部署arkid，那么arkOS留空, webServerBroker 下的参数都不用填了；

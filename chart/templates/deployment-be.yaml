@@ -84,7 +84,7 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.be.resources | nindent 12 }}
           volumeMounts:
             - name: "settings-local"
               mountPath: "/var/arkid/settings_local.py"
