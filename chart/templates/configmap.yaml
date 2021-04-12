@@ -47,7 +47,7 @@ data:
   arkid.local.toml: |-
     name = "demo arkid"
     # host = 'ngarkid.vaiwan.com'
-    host = 'localhost:8000'
+    host = "{{ .Values.ingress.host.name }}"
     https_enabled = 0
 
     [email]

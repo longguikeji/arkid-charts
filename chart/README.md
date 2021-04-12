@@ -15,22 +15,23 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
+### 安装
 ```shell
 ## arkid v2.0
 git clone --branch v2-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
 
 cd arkid-charts/chart
 
+# 安装
 helm install arkidv2 . \
 --set persistence.init=true \
 --set ingress.cert=false \
 --set ingress.tls=false \
 --set ingress.host.name=arkid.yourcompany.com
-```
 
+# 暴露端口访问
+kubectl port-forward svc/arkid-portal  8989:80
 
-```shell
-> kubectl port-forward svc/arkid-portal  8989:80
 Forwarding from 127.0.0.1:8989 -> 80
 Handling connection for 8989
 ```
@@ -56,7 +57,7 @@ Handling connection for 8989
 | fe.resources.requests | arkid前端的requests  | {"cpu": "800m","memory": "1024Mi"} |
 | fe.resources.limits   | arkid前端的limits    | {}                                 |
 | be.image              | arkid后端的镜像      | longguikeji/arkid:v2dev            |
-| be.pullPolicy         |                      |                                    |
+| be.pullPolicy         | IfNotPresent, Always	|  IfNotPresent                   |
 | be.resources.requests | arkid后端的requests  | {"cpu": "800m","memory": "1024Mi"} |
 | be.resources.limits   | arkid后端的limits    | {}                                 |
 
