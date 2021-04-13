@@ -101,7 +101,7 @@ spec:
             name: {{ template "arkid.fullname" . }}
         - name: arkid-data-be
           persistentVolumeClaim:
-            claimName: "{{ include "arkid.fullname" . }}-mysql"
+            claimName: "{{ include "arkid.fullname" . }}"
       {{if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

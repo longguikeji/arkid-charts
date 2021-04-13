@@ -44,6 +44,8 @@ services:
     restart: always
     networks:
       - arkid
+    volumes:
+      - ${WORKSPACE}/fe.conf:/etc/nginx/conf.d/default.conf
 
   db:
     image: mysql:5.7
