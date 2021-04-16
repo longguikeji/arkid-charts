@@ -65,6 +65,7 @@ data:
     name = "demo arkid"
     # host = 'ngarkid.vaiwan.com'
     host = "{{ .Values.ingress.host.name }}"
+    frontend_host = "{{ .Values.ingress.host.name }}"
     https_enabled = 0
 
     [email]
