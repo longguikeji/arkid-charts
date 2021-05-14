@@ -8,10 +8,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  fe.env: |-
-    NODE_ENV = production
-    VUE_APP_BASE_API = ''
-    VUE_APP_HOST = "http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.host.name }}"
   fe.conf: |-
     server {
         listen       80;
