@@ -131,3 +131,14 @@ Return the redis db
     {{- printf "%d" (.Values.externalRedis.db | int ) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return https 1 or 0
+*/}}
+{{- define "httpsorNot" -}}
+{{- if .Values.ingress.tls }}
+        {{- printf "%d" 1  -}}
+{{- else -}}
+    {{- printf "%d" 0 -}}
+{{- end -}}
+{{- end -}}
