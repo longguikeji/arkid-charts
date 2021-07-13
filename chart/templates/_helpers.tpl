@@ -126,7 +126,7 @@ Return the redis db
 */}}
 {{- define "arkid.redisDB" -}}
 {{- if .Values.redis.enabled }}
-        {{- printf "0"  -}}
+        {{- printf "0" -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalRedis.db | int ) -}}
 {{- end -}}
