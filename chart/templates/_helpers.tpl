@@ -115,7 +115,7 @@ Return the redis port
 */}}
 {{- define "arkid.redisPort" -}}
 {{- if .Values.redis.enabled }}
-        {{- printf "3306"  -}}
+    {{- printf "6379" -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalRedis.port | int ) -}}
 {{- end -}}
