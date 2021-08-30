@@ -74,10 +74,10 @@ spec:
               subPath: mysql/config
       volumes:
         - name: arkid-data
+          {{- if .Values.persistence.init }}
           persistentVolumeClaim:
             claimName: "{{ include "arkid.fullname" . }}-mysql"
-      {{if .Values.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
-      {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
 {{- end -}}

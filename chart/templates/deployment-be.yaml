@@ -46,6 +46,16 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - chmod -R 777 /tmp
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        name: chmod
+        volumeMounts:
+        - mountPath: /tmp
+          name: arkid-data-be
       - image: busybox
         command:
         - /bin/sh
@@ -95,14 +105,20 @@ spec:
             - name: arkid-data-be
               mountPath: /data
               subPath: be
+            - mountPath: /var/arkid/djangosaml2idp/certificates
+              name: arkid-data-be
+              subPath: cert
+            - mountPath: /var/arkid/djangosaml2idp/saml2_config
+              name: arkid-data-be
+              subPath: saml2config
       volumes:
         - name: settings-local
           configMap:
             name: {{ template "arkid.fullname" . }}
         - name: arkid-data-be
+          {{- if .Values.persistence.init }}
           persistentVolumeClaim:
             claimName: "{{ include "arkid.fullname" . }}"
-      {{if .Values.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
-      {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

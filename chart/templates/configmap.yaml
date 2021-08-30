@@ -8,6 +8,21 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
+  config.json: |-
+    {
+      "ARKID_DOMAIN": "http://{{ template "arkid.fullname" . }}-be/api/",
+      "LDAP_PORT": 1389,
+      "USER_ATTRIBUTES_MAPPING": {
+        "uid": "uuid"
+      },
+      "GROUP_ATTRIBUTES_MAPPING": {
+        "uid": "uuid"
+      },
+      "DEPARTMENT_ATTRIBUTES_MAPPING": {
+        "uid": "uuid"
+      }
+    }
+
   fe.conf: |-
     server {
         listen       80;

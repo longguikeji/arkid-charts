@@ -33,15 +33,13 @@ externalRedis:
   db: 0
 
 ldap:
-  image: longguikeji/ark-sql-ldap:1.3.0
+  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:v2dev-3-fe46dc22
   pullPolicy: IfNotPresent
-  adminPassword: admin
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
-  # 当svcType为NodePort时有效，ldap 636暴露到nodePort的端口, 留空则会随机挑选一个端口
-  nodePort636:
   # 当svcType为NodePort时有效，ldap 389暴露到nodePort的端口, 留空则会随机挑选一个端口
-  nodePort389:
+  nodePort389: 30189
+  
 be:
   image: longguikeji/arkid:v2dev
   pullPolicy: IfNotPresent

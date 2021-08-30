@@ -67,7 +67,3 @@ spec:
         - name: settings-local
           configMap:
             name: {{ template "arkid.fullname" . }}
-      {{if .Values.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
-      {{- end }}

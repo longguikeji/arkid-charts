@@ -31,8 +31,4 @@ spec:
           - "{{ .Values.webServerBroker.arkOS }}"
           - "-i"
           - "http://{{ include "arkid.fullname" . }}-be:8080"
-      {{if .Values.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
-      {{- end }}
 {{- end }}

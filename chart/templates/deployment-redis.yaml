@@ -58,8 +58,4 @@ spec:
           env:
             - name: TZ
               value: 'Asia/Shanghai'
-      {{if .Values.imagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
-      {{- end }}
 {{- end }}
