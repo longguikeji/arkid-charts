@@ -2,7 +2,7 @@
 {{- $fullName := include "arkid.fullname" . -}}
 {{- $ingressPaths := .Values.ingress.paths -}}
 {{- $domain := .Values.ingress.host.name -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ $fullName }}

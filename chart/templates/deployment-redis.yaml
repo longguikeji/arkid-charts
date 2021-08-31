@@ -19,7 +19,7 @@ spec:
     app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 ---
-apiVersion: apps/v1
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "arkid.redis.fullname" . }}

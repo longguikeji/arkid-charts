@@ -19,7 +19,7 @@ spec:
     app.kubernetes.io/name: "{{ include "arkid.name" . }}-portal"
     app.kubernetes.io/instance: "{{ .Release.Name }}-portal"
 ---
-apiVersion: apps/v1
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "arkid.fullname" . }}-portal

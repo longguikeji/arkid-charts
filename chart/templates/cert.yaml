@@ -6,6 +6,7 @@ metadata:
   name: {{ .Release.Name }}-crt
   namespace: {{ .Release.Namespace }}
 spec:
+  renewBefore: 720h
   secretName: {{ .Release.Name }}-crt
   dnsNames:
     - {{ $domain }}
