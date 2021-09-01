@@ -1,3 +1,4 @@
+{{- if false }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -34,3 +35,4 @@ spec:
   - hosts:
     - '*.arkid.xxx.xxx'
     secretName: arkidxx-fan
+{{- end }}
