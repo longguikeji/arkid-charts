@@ -67,7 +67,7 @@ services:
       - "--collation-server=utf8mb4_unicode_ci"
 
   ldap:
-    image: longguikeji/ark-sql-ldap:1.3.0
+    image: longguikeji/arkid_ldap_server:v2dev
     container_name: ${INSTANCE}-ldap
     restart: always
     networks:
@@ -75,16 +75,11 @@ services:
     depends_on:
       - be
     ports:
-      - ${LDAP_PORT}:389
+      - ${LDAP_PORT}:1389
+    volumes:
+      - ${WORKSPACE}/ldapjs-config.json:/usr/src/app/config.json
     environment:
-      - SQL_HOST=${INSTANCE}-db
-      - SQL_PORT=3306
-      - SQL_USER=${MYSQL_USER}
-      - SQL_PWD=${MYSQL_PASSWORD}
-      - LDAP_PASSWORD=${LDAP_ADMIN_PASSWORD}
-      - SQL_DB=arkid
-      - BACKEND=sql
-      - SLAPD_NOFILE_SOFT=10000
+      - TZ=Asia/Shanghai
 
   redis:
     image: redis:5.0.3
