@@ -77,8 +77,7 @@ data:
     PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
 
   arkid.local.toml: |-
-    name = "demo arkid"
-    # host = 'ngarkid.vaiwan.com'
+    name = "arkid"
     host = "{{ .Values.ingress.host.name }}"
     frontend_host = "{{ .Values.ingress.host.name }}"
     https_enabled = {{ include "httpsorNot" . }}
@@ -105,7 +104,7 @@ data:
         signature = ''
 
         [extension.redis_cache]
-        enabled = 0
+        enabled = 1
         host = '{{ include "arkid.redisHost" . }}'
         port = {{ include "arkid.redisPort" . }}
         db = {{ include "arkid.redisDB" . }}
