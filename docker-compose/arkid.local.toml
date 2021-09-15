@@ -1,6 +1,6 @@
 name = "arkid v2"
-host = 'localhost:8000'
-frontend_host = 'localhost:8000'
+host = 'localhost:8989'
+frontend_host = 'localhost:8989'
 https_enabled = 0
 
 [email]
