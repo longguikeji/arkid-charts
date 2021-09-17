@@ -27,7 +27,6 @@ services:
       - MYSQL_DATABASE=arkid
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
       - REDIS_HOST=${INSTANCE}-redis
     networks:
       - arkid
