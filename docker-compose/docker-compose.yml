@@ -21,6 +21,7 @@ services:
     sysctls:
       - net.core.somaxconn=65535
     restart: always
+    command: tini -- supervisord
     environment:
       - MYSQL_HOST=${INSTANCE}-db
       - MYSQL_PORT=3306
@@ -35,10 +36,9 @@ services:
     volumes:
       - ${WORKSPACE}/settings_local.py:/var/arkid/settings_local.py
       - ${WORKSPACE}/arkid.local.toml:/var/arkid/arkid.local.toml
+      - ${WORKSPACE}/supervisord.conf:/var/arkid/supervisord.conf
       - ${WORKSPACE}/be/cert:/var/arkid/djangosaml2idp/certificates
       - ${WORKSPACE}/be/saml2config:/var/arkid/djangosaml2idp/saml2_config
-
-     
 
   fe:
     image: longguikeji/arkid-fe:v2dev

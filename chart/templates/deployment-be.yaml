@@ -95,10 +95,14 @@ spec:
               containerPort: 80
               protocol: TCP
           resources: {{- toYaml .Values.be.resources | nindent 12 }}
+          args: ["tini", "--", "supervisord"]
           volumeMounts:
             - name: "settings-local"
               mountPath: "/var/arkid/settings_local.py"
               subPath: "settings_local.py"
+            - name: "settings-local"
+              mountPath: "/var/arkid/supervisord.conf"
+              subPath: "supervisord.conf"
             - name: "settings-local"
               mountPath: "/var/arkid/arkid.local.toml"
               subPath: "arkid.local.toml"
