@@ -21,7 +21,7 @@ services:
     sysctls:
       - net.core.somaxconn=65535
     restart: always
-    command: tini -- supervisord
+    command: supervisord
     environment:
       - MYSQL_HOST=${INSTANCE}-db
       - MYSQL_PORT=3306
