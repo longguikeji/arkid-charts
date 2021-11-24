@@ -33,7 +33,7 @@ externalRedis:
   db: 0
 
 ldap:
-  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:v2dev-3-fe46dc22
+  image: longguikeji/arkid_ldap_server:v2dev
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
