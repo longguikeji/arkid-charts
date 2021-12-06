@@ -1,4 +1,6 @@
 {{- if .Values.ingress.enabled -}}
+{{- $apiIsStable := eq (include "ydzs.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "ydzs.ingress.supportsPathType" .) "true" -}}
 {{- $fullName := include "arkid.fullname" . -}}
 {{- $ingressPaths := .Values.ingress.paths -}}
 {{- $domain := .Values.ingress.host.name -}}
@@ -28,7 +30,17 @@ spec:
       http:
         paths:
           - path: /
+            {{- if $ingressSupportsPathType }}
+            pathType: Prefix
+            {{- end }}
             backend:
-              serviceName: {{ $fullName }}-portal
+              {{- if $apiIsStable }}
+              service:
+                name: {{ $fullName }}-portal
+                port:
+                  number: 80
+              {{- else }}
+              serviceName: {{ $fullName }}-portal 
               servicePort: 80
+              {{- end }}
 {{- end }}
