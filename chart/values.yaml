@@ -41,7 +41,7 @@ ldap:
   nodePort389: 30189
   
 be:
-  image: longguikeji/arkid:v2dev-134
+  image: longguikeji/arkid:v2dev-135
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
