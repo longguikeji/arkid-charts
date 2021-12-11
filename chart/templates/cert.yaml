@@ -10,14 +10,6 @@ spec:
   secretName: {{ .Release.Name }}-crt
   dnsNames:
     - {{ $domain }}
-  tls:
-    - {{ $domain }}
-  acme:
-    config:
-    - http01:
-        ingressClass: nginx
-      domains:
-      - {{ $domain }}
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
