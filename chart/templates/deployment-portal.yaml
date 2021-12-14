@@ -14,7 +14,7 @@ spec:
     - port: 80
       {{- if eq .Values.portal.svcType "NodePort" -}}
       nodePort: 32580
-      {{- else -}}
+      {{- end -}}
       targetPort: 80
       protocol: TCP
       name: http
