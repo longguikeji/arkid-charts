@@ -69,6 +69,10 @@ spec:
         - mountPath: /usr/src/app/config.json
           name: settings-local
           subPath: config.json
+      {{- if .Values.ldap.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.ldap.nodeSelector | indent 8 }}
+      {{- end }}
       volumes:
       - configMap:
           defaultMode: 420

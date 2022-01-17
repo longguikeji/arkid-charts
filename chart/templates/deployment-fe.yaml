@@ -63,6 +63,10 @@ spec:
             - mountPath: /etc/nginx/conf.d/default.conf
               name: settings-local
               subPath: fe.conf
+      {{- if .Values.fe.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.fe.nodeSelector | indent 8 }}
+      {{- end }}
       volumes:
         - name: settings-local
           configMap:

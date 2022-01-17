@@ -14,6 +14,13 @@ mysql:
   pullPolicy: IfNotPresent
   rootPassword: root
   database: arkid
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {} 
 
 externalDatabase:
   host: ""
@@ -26,6 +33,13 @@ redis:
   enabled: true
   image: redis:5.0.3
   pullPolicy: IfNotPresent
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {} 
 
 externalRedis:
   host: ""
@@ -39,22 +53,45 @@ ldap:
   svcType: NodePort
   # 当svcType为NodePort时有效，ldap 389暴露到nodePort的端口, 留空则会随机挑选一个端口
   nodePort389: 30189
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {} 
   
 be:
-  image: longguikeji/arkid:v2dev-139
+  image: longguikeji/arkid:v2dev
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
     requests: {"cpu": "300m","memory": "1024Mi"}
+  replicas: 1
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {} 
 
 fe:
-  image: longguikeji/arkid-fe:v2dev-58
+  image: longguikeji/arkid-fe:v2dev
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
     requests: {"cpu": "200m","memory": "1024Mi"}
+  replicas: 1
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {} 
 
 # webServerBroker:
 #   ## 如果单独部署arkid，那么arkOS留空, webServerBroker 下的参数都不用填了；
@@ -70,6 +107,13 @@ portal:
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: ClusterIP
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {} 
 
 
 nameOverride: ""
@@ -87,5 +131,5 @@ ingress:
   # 如果没有 cert-manager，tls为true则helm会生成一个自签名的证书存到secret
   tls: true
 
-
-
+ha:
+  enabled: true

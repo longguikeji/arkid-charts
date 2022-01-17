@@ -72,6 +72,10 @@ spec:
             - name: arkid-data
               mountPath: /etc/mysql/conf.d
               subPath: mysql/config
+      {{- if .Values.mysql.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.mysql.nodeSelector | indent 8 }}
+      {{- end }}
       volumes:
         - name: arkid-data
           {{- if .Values.persistence.init }}

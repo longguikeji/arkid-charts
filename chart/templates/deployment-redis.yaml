@@ -41,6 +41,10 @@ spec:
         app.kubernetes.io/name: {{ include "arkid.redis.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      {{- if .Values.redis.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.redis.nodeSelector | indent 8 }}
+      {{- end }}
       initContainers:
       - image: busybox
         command:
