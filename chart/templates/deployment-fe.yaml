@@ -29,6 +29,7 @@ metadata:
     app.kubernetes.io/instance: "{{ .Release.Name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  replicas: {{ .Values.fe.replicas }}
   selector:
     matchLabels:
       app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
@@ -39,7 +40,6 @@ spec:
         app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
         app.kubernetes.io/instance: "{{ .Release.Name }}"
     spec:
-      replicas: {{ .Values.fe.replicas }}
     {{- if or .Values.fe.nodeAffinity .Values.fe.podAffinity .Values.fe.podAntiAffinity }}
       affinity:
       {{- with .Values.fe.nodeAffinity }}
