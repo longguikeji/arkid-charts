@@ -41,6 +41,23 @@ spec:
         app.kubernetes.io/name: "{{ include "arkid.mysql.fullname" . }}"
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      {{- if .Values.mysql.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.mysql.nodeSelector | indent 8 }}
+      {{- end }}
+    {{- if or .Values.mysql.nodeAffinity .Values.mysql.podAffinity .Values.mysql.podAntiAffinity }}
+      affinity:
+      {{- with .Values.mysql.nodeAffinity }}
+        nodeAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- with .Values.mysql.podAffinity }}
+        podAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- if .Values.mysql.podAntiAffinity }}
+        podAntiAffinity:
+          {{- toYaml .Values.mysql.podAntiAffinity | nindent 10 }}
+      {{- end }}
+    {{- end }}
       initContainers:
       - image: busybox
         command:
@@ -72,10 +89,6 @@ spec:
             - name: arkid-data
               mountPath: /etc/mysql/conf.d
               subPath: mysql/config
-      {{- if .Values.mysql.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.mysql.nodeSelector | indent 8 }}
-      {{- end }}
       volumes:
         - name: arkid-data
           {{- if .Values.persistence.init }}

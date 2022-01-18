@@ -21,6 +21,17 @@ mysql:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {} 
+  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  nodeAffinity: {}
+  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  podAffinity: {}
+  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  # You may either toggle options below for default anti-affinity rules,
+  # or specify the whole set of anti-affinity rules instead of them.
+  podAntiAffinity: {}
 
 externalDatabase:
   host: ""
@@ -39,7 +50,18 @@ redis:
   ##   "nfs": "true",
   ##   "ip": "111.111.111.111"
   ## }
-  nodeSelector: {} 
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  nodeAffinity: {}
+  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  podAffinity: {}
+  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  # You may either toggle options below for default anti-affinity rules,
+  # or specify the whole set of anti-affinity rules instead of them.
+  podAntiAffinity: {}
 
 externalRedis:
   host: ""
@@ -59,7 +81,18 @@ ldap:
   ##   "nfs": "true",
   ##   "ip": "111.111.111.111"
   ## }
-  nodeSelector: {} 
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  nodeAffinity: {}
+  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  podAffinity: {}
+  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  # You may either toggle options below for default anti-affinity rules,
+  # or specify the whole set of anti-affinity rules instead of them.
+  podAntiAffinity: {}
   
 be:
   image: longguikeji/arkid:v2dev
@@ -75,7 +108,24 @@ be:
   ##   "nfs": "true",
   ##   "ip": "111.111.111.111"
   ## }
-  nodeSelector: {} 
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  nodeAffinity: {}
+  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  podAffinity: {}
+  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  # You may either toggle options below for default anti-affinity rules,
+  # or specify the whole set of anti-affinity rules instead of them.
+  podAntiAffinity:
+    # Type of anti-affinity rules: either `soft`, `hard` or empty value (which
+    # disables anti-affinity rules).
+    type: soft
+    # Weight for `soft` anti-affinity rules.
+    # Does not apply for other anti-affinity types.
+    weight: 100
 
 fe:
   image: longguikeji/arkid-fe:v2dev
@@ -91,7 +141,24 @@ fe:
   ##   "nfs": "true",
   ##   "ip": "111.111.111.111"
   ## }
-  nodeSelector: {} 
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  nodeAffinity: {}
+  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  podAffinity: {}
+  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  # You may either toggle options below for default anti-affinity rules,
+  # or specify the whole set of anti-affinity rules instead of them.
+  podAntiAffinity:
+    # Type of anti-affinity rules: either `soft`, `hard` or empty value (which
+    # disables anti-affinity rules).
+    type: soft
+    # Weight for `soft` anti-affinity rules.
+    # Does not apply for other anti-affinity types.
+    weight: 100
 
 # webServerBroker:
 #   ## 如果单独部署arkid，那么arkOS留空, webServerBroker 下的参数都不用填了；
@@ -113,7 +180,18 @@ portal:
   ##   "nfs": "true",
   ##   "ip": "111.111.111.111"
   ## }
-  nodeSelector: {} 
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  nodeAffinity: {}
+  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  podAffinity: {}
+  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  # You may either toggle options below for default anti-affinity rules,
+  # or specify the whole set of anti-affinity rules instead of them.
+  podAntiAffinity: {}
 
 
 nameOverride: ""

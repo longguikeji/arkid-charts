@@ -44,6 +44,38 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       replicas: {{ .Values.be.replicas }}
+    {{- if or .Values.be.nodeAffinity .Values.be.podAffinity .Values.be.podAntiAffinity }}
+      affinity:
+      {{- with .Values.be.nodeAffinity }}
+        nodeAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- with .Values.be.podAffinity }}
+        podAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- if .Values.be.podAntiAffinity }}
+        podAntiAffinity:
+        {{- if .Values.be.podAntiAffinity.type }}
+        {{- if eq .Values.be.podAntiAffinity.type "hard" }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- else if eq .Values.be.podAntiAffinity "soft" }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: {{ .Values.be.podAntiAffinity.weight | int64 }}
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+        {{- else }}
+          {{- toYaml .Values.be.podAntiAffinity | nindent 10 }}
+        {{- end }}
+    {{- end }}
       initContainers:
       - command:
         - /bin/sh
