@@ -201,6 +201,8 @@ ingress:
   enabled: true
   # cert-manager 
   cert: false
+  # 为空则使用 cert-manager生成的证书，不为空则使用指定的证书
+  secret:
   annotations: {"kubernetes.io/ingress.class": "nginx","certmanager.k8s.io/cluster-issuer": "letsencrypt-prod"}
   host:
     # 需要DNS解析到ingress的ip
