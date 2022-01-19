@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  config.json: |-
+  config.json: |
     {
       "ARKID_DOMAIN": "http://{{ template "arkid.fullname" . }}-be/api/",
       "LDAP_PORT": 1389,
@@ -23,7 +23,7 @@ data:
       }
     }
 
-  fe.conf: |-
+  fe.conf: |
     server {
         listen       80;
         listen  [::]:80;
@@ -40,7 +40,7 @@ data:
             root   /usr/share/nginx/html;
         }
     }
-  settings_local.py: |-
+  settings_local.py: |
     # mysql database
     DATABASES = {
         'default': {
@@ -75,7 +75,7 @@ data:
     DOMAIN="{{ .Values.ingress.host.name }}"
     PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
 
-  supervisord.conf: |-
+  supervisord.conf: |
     [supervisord]
     nodaemon=true
 
@@ -109,44 +109,34 @@ data:
 
     [supervisorctl]
     serverurl=unix:///var/run/supervisor.sock
-
-  arkid.local.toml: |-
+  arkid.local.toml: |
     name = "arkid"
     host = "{{ .Values.ingress.host.name }}"
     frontend_host = "{{ .Values.ingress.host.name }}"
     https_enabled = {{ include "httpsorNot" . }}
-
     [email]
     host = "smtp.qq.com"
     port = 25
     user = ""
     password = ""
-
-
     [extension]
     root = "./extension_root"
-
         [extension.demo]
         config1 = 'demo_config1'
         config2 = 'demo_config2'
-
         [extension.aliyun]
         access_key = ''
         secret_key = ''
-
         template = ''
         signature = ''
-
         [extension.redis_cache]
         enabled = 1
         host = '{{ include "arkid.redisHost" . }}'
         port = {{ include "arkid.redisPort" . }}
         db = {{ include "arkid.redisDB" . }}
-
         [extension.feishu]
         enabled = 1
-
-  default.conf: |-
+  default.conf: |
     server {
         listen       80;
         set_real_ip_from 172.0.0.0/8;
