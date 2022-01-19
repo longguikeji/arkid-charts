@@ -62,7 +62,7 @@ spec:
                 matchLabels:
                   app.kubernetes.io/name: {{ include "arkid.name" . }}-be
                   app.kubernetes.io/instance: {{ .Release.Name }}
-        {{- else if eq .Values.be.podAntiAffinity "soft" }}
+        {{- else if eq .Values.be.podAntiAffinity.type "soft" }}
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: {{ .Values.be.podAntiAffinity.weight | int64 }}
             podAffinityTerm:

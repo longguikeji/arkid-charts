@@ -23,12 +23,11 @@ spec:
   tls:
     - hosts:
       - {{ $domain }}
-
       {{- if .Values.ingress.secret }}
       secretName: {{ .Values.ingress.secret }}
       {{- else }}
       secretName: {{ .Release.Name }}-crt
-      {{-end }}
+      {{- end }}
 {{- end }}
   rules:
     - host: {{ $domain }}
