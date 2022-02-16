@@ -2,7 +2,6 @@
 {{- $apiIsStable := eq (include "ydzs.ingress.isStable" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "ydzs.ingress.supportsPathType" .) "true" -}}
 {{- $fullName := include "arkid.fullname" . -}}
-{{- $ingressPaths := .Values.ingress.paths -}}
 {{- $domain := .Values.ingress.host.name -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress

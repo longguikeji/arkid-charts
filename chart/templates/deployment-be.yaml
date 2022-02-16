@@ -15,10 +15,6 @@ spec:
       targetPort: 80
       protocol: TCP
       name: http
-    - name: broker
-      port: 8080
-      targetPort: 8080
-      protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "arkid.name" . }}-be
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -88,6 +84,18 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: arkid-data-be
+      - command:
+        - /bin/sh
+        - -c
+        - cp -r /var/arkid/extension_root/* /tmp/
+        image: "{{ .Values.be.image }}"
+        imagePullPolicy: IfNotPresent
+        name: cpextensionroot
+        resources: {}
+        volumeMounts:
+        - mountPath: /tmp
+          name: arkid-data-be
+          subPath: extension_root
       - image: busybox
         command:
         - /bin/sh
@@ -138,15 +146,6 @@ spec:
             - name: "settings-local"
               mountPath: "/var/arkid/arkid.local.toml"
               subPath: "arkid.local.toml"
-            - name: arkid-data-be
-              mountPath: /data
-              subPath: be
-            - mountPath: /var/arkid/djangosaml2idp/certificates
-              name: arkid-data-be
-              subPath: cert
-            - mountPath: /var/arkid/djangosaml2idp/saml2_config
-              name: arkid-data-be
-              subPath: saml2config
       {{- if .Values.be.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.be.nodeSelector | indent 8 }}

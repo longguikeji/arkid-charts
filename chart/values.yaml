@@ -193,6 +193,18 @@ portal:
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
 
+celery:
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {}
+  resources:
+    limits: {}
+    requests: {"cpu": "200m","memory": "1024Mi"}
+
 
 nameOverride: ""
 fullnameOverride: ""
@@ -210,6 +222,16 @@ ingress:
     name: arkid.longguikeji.com
   # 如果没有 cert-manager，tls为true则helm会生成一个自签名的证书存到secret
   tls: true
+
+ingressroute:
+  enabled: false
+  host:
+    # 需要DNS解析到ingress的ip
+    # 本地调试就在 /etc/hosts里配置一下
+    name: arkid.longguikeji.com
+  tls: 
+    enabled: true
+    certResolver:
 
 ha:
   enabled: true

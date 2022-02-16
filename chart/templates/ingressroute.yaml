@@ -1,0 +1,22 @@
+{{- if .Values.ingressroute.enabled -}}
+{{- $fullName := include "arkid.fullname" . -}}
+{{- $domain := .Values.ingressroute.host.name -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $fullName }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`{{ $domain }}`)
+      priority: 11
+      services:
+        - name: {{ $fullName }}-portal
+          port: 80
+{{- if .Values.ingressroute.tls.enabled }}
+  tls:
+    certResolver: {{ .Values.ingressroute.tls.certResolver }}
+{{- end }}
+{{- end }}
