@@ -1,0 +1,32 @@
+name: release to harbor
+
+on:
+  # workflow_dispatch:
+  #   inputs:
+  #     prod_version:
+  #       description: 'the tag of the charts to release, like `2.0.1`'
+  #       default: ''
+  #       required: true
+  push:
+    tags:        
+      - 2.**
+
+jobs:
+  package2harbor:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # git仓库的Tags == Chart.yaml/version 
+        # 每次修改chart都要更新一下version的小版本号
+        # 还需要写一个发布Tag的action，发布完tag之后，自动触发这个流水线根据创建的tag来发布到harbor
+        ref: '${{ github.ref }}'
+    - run: mv chart arkid
+    - uses: goodsmileduck/helm-push-action@v2
+      env:
+        SOURCE_DIR: '.'
+        CHART_FOLDER: 'arkid'
+        FORCE: 'True'
+        CHARTMUSEUM_URL: 'https://harbor.longguikeji.com/chartrepo/public'
+        CHARTMUSEUM_USER: '${{ secrets.HARBORUSER }}'
+        CHARTMUSEUM_PASSWORD: ${{ secrets.HARBORPWD }}
