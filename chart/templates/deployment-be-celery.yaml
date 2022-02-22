@@ -76,6 +76,9 @@ spec:
             - name: "settings-local"
               mountPath: "/var/arkid/arkid.local.toml"
               subPath: "arkid.local.toml"
+            - name: "settings-local"
+              mountPath: "/var/arkid/supervisord.conf"
+              subPath: "supervisordcelery.conf"
       {{- if .Values.celery.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.celery.nodeSelector | indent 8 }}
