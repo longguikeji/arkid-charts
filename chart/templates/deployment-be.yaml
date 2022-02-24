@@ -87,7 +87,7 @@ spec:
       - command:
         - /bin/sh
         - -c
-        - cp -r /var/arkid/extension_root/* /tmp/
+        - cd /tmp/ && rm -rf `ls /var/arkid/extension_root/` && cp -r /var/arkid/extension_root/* /tmp/
         image: "{{ .Values.be.image }}"
         imagePullPolicy: IfNotPresent
         name: cpextensionroot
