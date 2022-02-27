@@ -194,6 +194,8 @@ portal:
   podAntiAffinity: {}
 
 celery:
+  ## 定时任务，定制化功能
+  enabled: false
   ## 主机标签
   ## 要符合json格式，如：
   ## {
