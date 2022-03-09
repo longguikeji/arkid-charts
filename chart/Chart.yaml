@@ -9,9 +9,9 @@ keywords:
   - SSO
 home: https://saas.arkid.cc/
 sources:
-  - https://github.com/traefik/traefik
-  - https://github.com/traefik/traefik-helm-chart
+  - https://github.com/longguikeji/arkid
+  - https://github.com/longguikeji/arkid-frontend
 maintainers:
 - email: jiashuai@longguikeji.com
-  name: jiashuai
-icon: https://raw.githubusercontent.com/skoogi/charts/assets/assets/logo.png
+  name: notevery
+icon: https://raw.githubusercontent.com/longguikeji/arkid-charts/chart/assets/arkidlogo.png
