@@ -41,6 +41,7 @@ data:
         }
     }
   settings_local.py: |
+    DEBUG = False
     # mysql database
     DATABASES = {
         'default': {

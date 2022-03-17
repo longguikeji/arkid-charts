@@ -1,19 +1,64 @@
 imagePullSecrets:
 
 
-# 持久化
-persistence:  # mysql
-  init: false
+# 持久化后端
+persistence:
+  init: true
   storageClass:
   accessMode: ReadWriteOnce
   size: 8Gi
 
 mysql:
   enabled: true
-  image: mysql:5.7
-  pullPolicy: IfNotPresent
-  rootPassword: root
-  database: arkid
+  image:
+    registry: harbor.longguikeji.com
+    repository: ark-releases/mysql
+    tag: 5.7.37-debian-10-r55
+    pullPolicy: IfNotPresent
+  ## @param architecture MySQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
+  ## MySQL Authentication parameters
+  ##
+  auth:
+    ## @param auth.rootPassword Password for the `root` user. Ignored if existing secret is provided
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
+    ##
+    rootPassword: "root"
+    ## @param auth.database Name for a custom database to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: arkid
+    ## @param auth.username Name for a custom user to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: "arkid"
+    ## @param auth.password Password for the new user. Ignored if existing secret is provided
+    ##
+    password: "arkid"
+    ## @param auth.replicationUser MySQL replication user
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
+    ##
+    replicationUser: replicator
+    ## @param auth.replicationPassword MySQL replication user password. Ignored if existing secret is provided
+    ##
+    replicationPassword: "replicator"
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  primary:
+    persistence:
+      enabled: true
+    ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
+    resources: {  "limits": {"cpu": "1000m","memory": "2048Mi"},"requests": {"cpu": "500m","memory": "1024Mi"}}
+  secondary:
+    persistence:
+      enabled: true
+    replicas: 1
+    resources: {  "limits": {"cpu": "1000m","memory": "1024Mi"},"requests": {"cpu": "500m","memory": "512Mi"}}
   ## 主机标签
   ## 要符合json格式，如：
   ## {
@@ -42,7 +87,22 @@ externalDatabase:
 
 redis:
   enabled: true
-  image: redis:5.0.3
+  image:
+    registry: harbor.longguikeji.com
+    repository: ark-releases/redis
+    ## Bitnami Redis image tag
+    ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
+    ##
+    tag: 5.0.14-debian-10-r159
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+  cluster:
+    enabled: false
+    slaveCount: 1
+  clusterDomain: cluster.local
   pullPolicy: IfNotPresent
   ## 主机标签
   ## 要符合json格式，如：
@@ -69,7 +129,7 @@ externalRedis:
   db: 0
 
 ldap:
-  image: longguikeji/arkid_ldap_server:v2dev
+  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:2
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
@@ -95,7 +155,7 @@ ldap:
   podAntiAffinity: {}
   
 be:
-  image: longguikeji/arkid:v2dev
+  image: harbor.longguikeji.com/ark-releases/arkid:2
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -128,7 +188,7 @@ be:
     weight: 100
 
 fe:
-  image: longguikeji/arkid-fe:v2dev
+  image: harbor.longguikeji.com/ark-releases/arkid-fe:2
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -173,7 +233,7 @@ portal:
   image: nginx:alpine
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
-  svcType: ClusterIP
+  svcType: NodePort
   ## 主机标签
   ## 要符合json格式，如：
   ## {
@@ -212,7 +272,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 ingress:
-  enabled: true
+  enabled: false
   # cert-manager 
   cert: false
   # 为空则使用 cert-manager生成的证书，不为空则使用指定的证书
@@ -221,16 +281,16 @@ ingress:
   host:
     # 需要DNS解析到ingress的ip
     # 本地调试就在 /etc/hosts里配置一下
-    name: arkid.longguikeji.com
+    name: arkid.cc
   # 如果没有 cert-manager，tls为true则helm会生成一个自签名的证书存到secret
-  tls: true
+  tls: false
 
 ingressroute:
   enabled: false
   host:
     # 需要DNS解析到ingress的ip
     # 本地调试就在 /etc/hosts里配置一下
-    name: arkid.longguikeji.com
+    name: arkid.cc
   tls: 
     enabled: true
     certResolver:

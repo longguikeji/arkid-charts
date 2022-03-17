@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.init .Values.mysql.enabled }}
+{{- if false }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
