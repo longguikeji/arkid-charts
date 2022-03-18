@@ -9,12 +9,10 @@ appVersion: "2.0.0"
 dependencies:
 - condition: mysql.enabled
   name: mysql
-  repository: https://github.com/longguikeji/arkid-charts
-  version: 8.8.*
+  version: 8.8.26
 - condition: redis.enabled
   name: redis
-  repository: https://github.com/longguikeji/arkid-charts
-  version: 10.5.*
+  version: 10.5.7
 keywords:
   - arkid
   - SSO
