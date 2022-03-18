@@ -59,12 +59,12 @@ spec:
       {{- end }}
     {{- end }}
       initContainers:
-      - image: busybox
+      - image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         command:
         - sh
         - -c
         - echo 65535 > /proc/sys/net/core/somaxconn
-        imagePullPolicy: Always
         name: setsysctl
         securityContext:
           privileged: true

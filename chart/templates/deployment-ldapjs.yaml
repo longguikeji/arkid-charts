@@ -55,12 +55,12 @@ spec:
       {{- end }}
     {{- end }}
       initContainers:
-      - image: busybox
+      - image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         command:
         - sh
         - -c
         - sysctl -w net.core.somaxconn=65535
-        imagePullPolicy: Always
         name: setsysctl
         securityContext:
           privileged: true
@@ -68,8 +68,8 @@ spec:
           - /bin/sh
           - '-c'
           - "until nc -z -w 2 {{ include "arkid.fullname" . }}-be 80 && echo {{ include "arkid.fullname" . }}-be ok; do sleep 2; done;"
-        image: busybox
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         name: check-be
       containers:
       - env:

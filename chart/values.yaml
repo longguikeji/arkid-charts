@@ -8,6 +8,10 @@ persistence:
   accessMode: ReadWriteOnce
   size: 8Gi
 
+initContainers:
+  image: harbor.longguikeji.com/ark-releases/busybox:latest
+  pullPolicy: IfNotPresent
+
 mysql:
   enabled: true
   image:

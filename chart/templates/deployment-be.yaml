@@ -78,8 +78,8 @@ spec:
         - /bin/sh
         - -c
         - chmod -R 777 /tmp
-        image: busybox
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         name: chmod
         volumeMounts:
         - mountPath: /tmp
@@ -96,12 +96,12 @@ spec:
         - mountPath: /tmp
           name: arkid-data-be
           subPath: extension_root
-      - image: busybox
+      - image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         command:
         - /bin/sh
         - -c
         - echo 65535 > /proc/sys/net/core/somaxconn
-        imagePullPolicy: IfNotPresent
         name: setsysctl
         securityContext:
           privileged: true
@@ -110,8 +110,8 @@ spec:
           - /bin/sh
           - '-c'
           - "until nc -z -w 2 {{ include "arkid.redis.fullname" . }} 6379 && echo {{ include "arkid.redis.fullname" . }} ok; do sleep 2; done;"
-        image: busybox
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         name: check-redis
       {{- end }}
       {{- if .Values.mysql.enabled }}
@@ -119,8 +119,8 @@ spec:
           - /bin/sh
           - '-c'
           - "until nc -z -w 2 {{ include "arkid.mysql.fullname" . }} 3306 && echo {{ include "arkid.mysql.fullname" . }} ok; do sleep 2; done;"
-        image: busybox
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         name: check-mysql
       {{- end }}
       containers:

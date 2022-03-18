@@ -78,8 +78,8 @@ spec:
           - /bin/sh
           - '-c'
           - "until nc -z -w 2 {{ include "arkid.fullname" . }}-be 80 && echo {{ include "arkid.fullname" . }}-be ok; do sleep 2; done;"
-        image: busybox
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
         name: check-all
       containers:
         - name: "{{ .Chart.Name }}-fe"
