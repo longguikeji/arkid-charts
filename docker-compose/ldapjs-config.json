@@ -1,6 +1,7 @@
 {
   "ARKID_DOMAIN": "http://be/api/",
   "LDAP_PORT": 1389,
+  "BASE_DN": "dc=longguikeji, dc=com",
   "USER_ATTRIBUTES_MAPPING": {
     "uid": "uuid"
   },

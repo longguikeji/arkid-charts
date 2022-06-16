@@ -12,6 +12,7 @@ data:
     {
       "ARKID_DOMAIN": "http://{{ template "arkid.fullname" . }}-be/api/",
       "LDAP_PORT": 1389,
+      "BASE_DN": "dc=longguikeji, dc=com",
       "USER_ATTRIBUTES_MAPPING": {
         "uid": "uuid"
       },
