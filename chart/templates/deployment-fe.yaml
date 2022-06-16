@@ -1,0 +1,107 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "arkid.fullname" . }}-fe"
+  labels:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+---
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: "{{ include "arkid.fullname" . }}-fe"
+  labels:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.fe.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ include "arkid.name" . }}-fe"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+    {{- if or .Values.fe.nodeAffinity .Values.fe.podAffinity .Values.fe.podAntiAffinity }}
+      affinity:
+      {{- with .Values.fe.nodeAffinity }}
+        nodeAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- with .Values.fe.podAffinity }}
+        podAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- if .Values.fe.podAntiAffinity }}
+        podAntiAffinity:
+        {{- if .Values.fe.podAntiAffinity.type }}
+        {{- if eq .Values.fe.podAntiAffinity.type "hard" }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "arkid.name" . }}-fe
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- else if eq .Values.fe.podAntiAffinity.type "soft" }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: {{ .Values.fe.podAntiAffinity.weight | int64 }}
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "arkid.name" . }}-fe
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+        {{- else }}
+          {{- toYaml .Values.fe.podAntiAffinity | nindent 10 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+      initContainers:
+      - command:
+          - /bin/sh
+          - '-c'
+          - "until nc -z -w 2 {{ include "arkid.fullname" . }}-be 80 && echo {{ include "arkid.fullname" . }}-be ok; do sleep 2; done;"
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        name: check-all
+      containers:
+        - name: "{{ .Chart.Name }}-fe"
+          image: "{{ .Values.fe.image }}"
+          imagePullPolicy: {{ .Values.fe.pullPolicy }}
+          env:
+            - name: TZ
+              value: 'Asia/Shanghai'
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources: {{- toYaml .Values.fe.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: settings-local
+              subPath: fe.conf
+      {{- if .Values.fe.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.fe.nodeSelector | indent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-local
+          configMap:
+            name: {{ template "arkid.fullname" . }}

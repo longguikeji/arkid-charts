@@ -1,0 +1,38 @@
+{{- if false }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: arkidxx-fan
+  namespace: arkidxx
+spec:
+  secretName: arkidxx-fan
+  commonName: arkid.xxx.xxx
+  dnsNames:
+  - arkid.xxx.xxx
+  - "*.arkid.xxx.xxx"
+  issuerRef:
+    name: letsencrypt-prod-dns01
+    kind: ClusterIssuer
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod-dns01
+    kubernetes.io/ingress.class: nginx
+  name: arkidv2intra-dns01
+  namespace: arkidv2intra
+spec:
+  rules:
+  - host: '*.arkid.xxx.xxx'
+    http:
+      paths:
+      - backend:
+          serviceName: arkidxxxx-portal
+          servicePort: 80
+        path: /
+  tls:
+  - hosts:
+    - '*.arkid.xxx.xxx'
+    secretName: arkidxx-fan
+{{- end }}

@@ -1,0 +1,21 @@
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.host }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host }}
+{{- end }}
+{{- else if contains "NodePort" .Values.ldap.svcType }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "arkid.fullname" . }})-ldap
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "ldap: http://$NODE_IP:$NODE_PORT"
+{{- else if contains "LoadBalancer" .Values.ldap.svcType }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get svc -w {{ include "arkid.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "arkid.fullname" . }}-be -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:80
+
+{{- else if contains "ClusterIP" .Values.portal.svcType }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "arkid.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  export DEPLOY_NAME={{ include "arkid.fullname" . }}-portal
+  echo "web: http://127.0.0.1:10080"
+  kubectl port-forward deploy/$DEPLOY_NAME 10080:80
+{{- end }}

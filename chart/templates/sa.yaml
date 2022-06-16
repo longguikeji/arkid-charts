@@ -1,0 +1,8 @@
+{{if .Values.imagePullSecrets }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+imagePullSecrets:
+- name: "{{ .Values.imagePullSecrets }}"
+{{- end }}

@@ -1,0 +1,76 @@
+{{- if false }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "arkid.fullname" . }}-ldap
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-ldap
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.ldap.svcType }}
+  ports:
+    - name: ldap
+      port: 389
+      {{- if .Values.ldap.nodePort }}
+      nodePort: {{ .Values.ldap.nodePort389 }}
+      {{- end }}
+      targetPort: 389
+      protocol: TCP
+    - name: ldaps
+      port:  636
+      {{- if .Values.ldap.nodePort }}
+      nodePort: {{ .Values.ldap.nodePort636 }}
+      {{- end }}
+      targetPort: 636
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-ldap
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "arkid.fullname" . }}-ldap
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-ldap
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-ldap
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-ldap
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      initContainers:
+      - image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        command:
+        - sh
+        - -c
+        - sysctl -w net.core.somaxconn=65535
+        name: setsysctl
+        securityContext:
+          privileged: true
+      - command:
+          - /bin/sh
+          - '-c'
+          - "until nc -z -w 2 {{ include "arkid.fullname" . }}-be 80 && echo {{ include "arkid.fullname" . }}-be ok; do sleep 2; done;"
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        name: check-be
+      containers:
+        - name: "{{ .Chart.Name }}-ldap"
+          image: "{{ .Values.ldap.image }}"
+          imagePullPolicy: {{ .Values.ldap.pullPolicy }}
+
+{{- end }}

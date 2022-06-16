@@ -1,0 +1,49 @@
+{{- if .Values.ingress.enabled -}}
+{{- $apiIsStable := eq (include "ydzs.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "ydzs.ingress.supportsPathType" .) "true" -}}
+{{- $fullName := include "arkid.fullname" . -}}
+{{- $domain := .Values.ingress.host.name -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    nginx.ingress.kubernetes.io/server-alias: '*.{{ $domain }}'
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.ingress.tls }}
+  tls:
+    - hosts:
+      - {{ $domain }}
+      {{- if .Values.ingress.secret }}
+      secretName: {{ .Values.ingress.secret }}
+      {{- else }}
+      secretName: {{ .Release.Name }}-crt
+      {{- end }}
+{{- end }}
+  rules:
+    - host: {{ $domain }}
+      http:
+        paths:
+          - path: /
+            {{- if $ingressSupportsPathType }}
+            pathType: Prefix
+            {{- end }}
+            backend:
+              {{- if $apiIsStable }}
+              service:
+                name: {{ $fullName }}-portal
+                port:
+                  number: 80
+              {{- else }}
+              serviceName: {{ $fullName }}-portal 
+              servicePort: 80
+              {{- end }}
+{{- end }}

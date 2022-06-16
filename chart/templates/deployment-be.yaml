@@ -1,0 +1,163 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "arkid.fullname" . }}-be
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "arkid.fullname" . }}-be
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.be.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- if or .Values.be.nodeAffinity .Values.be.podAffinity .Values.be.podAntiAffinity }}
+      affinity:
+      {{- with .Values.be.nodeAffinity }}
+        nodeAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- with .Values.be.podAffinity }}
+        podAffinity: {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- if .Values.be.podAntiAffinity }}
+        podAntiAffinity:
+        {{- if .Values.be.podAntiAffinity.type }}
+        {{- if eq .Values.be.podAntiAffinity.type "hard" }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- else if eq .Values.be.podAntiAffinity.type "soft" }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: {{ .Values.be.podAntiAffinity.weight | int64 }}
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "arkid.name" . }}-be
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+        {{- else }}
+          {{- toYaml .Values.be.podAntiAffinity | nindent 10 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - chmod -R 777 /tmp
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        name: chmod
+        volumeMounts:
+        - mountPath: /tmp
+          name: arkid-data-be
+      - image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        command:
+        - /bin/sh
+        - -c
+        - echo 65535 > /proc/sys/net/core/somaxconn
+        name: setsysctl
+        securityContext:
+          privileged: true
+      {{- if .Values.redis.enabled }}
+      - command:
+          - /bin/sh
+          - '-c'
+          - "until nc -z -w 2 {{ include "arkid.redis.fullname" . }} 6379 && echo {{ include "arkid.redis.fullname" . }} ok; do sleep 2; done;"
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        name: check-redis
+      {{- end }}
+      {{- if .Values.mysql.enabled }}
+      - command:
+          - /bin/sh
+          - '-c'
+          - "until nc -z -w 2 {{ include "arkid.mysql.fullname" . }} 3306 && echo {{ include "arkid.mysql.fullname" . }} ok; do sleep 2; done;"
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        name: check-mysql
+      {{- end }}
+      containers:
+        - name: "{{ .Chart.Name }}-be"
+          image: "{{ .Values.be.image }}"
+          imagePullPolicy: {{ .Values.be.pullPolicy }}
+          env:
+            - name: TZ
+              value: 'Asia/Shanghai'
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources: {{- toYaml .Values.be.resources | nindent 12 }}
+          args: ["supervisord"]
+          volumeMounts:
+            - name: "settings-local"
+              mountPath: "/var/arkid/settings_local.py"
+              subPath: "settings_local.py"
+            - name: "settings-local"
+              mountPath: "/var/arkid/supervisord.conf"
+              subPath: "supervisord.conf"
+            - name: "settings-local"
+              mountPath: "/var/arkid/arkid.local.toml"
+              subPath: "arkid.local.toml"
+            - mountPath: /data
+              name: arkid-data-be
+              subPath: be
+            - mountPath: /var/arkid/arkid_extensions
+              name: arkid-data-be
+              subPath: arkid_extensions
+            - mountPath: /var/arkid/extension_root/saml2/certificates
+              name: arkid-data-be
+              subPath: certificates
+            - mountPath: /var/arkid/extension_root/saml2/metadatas
+              name: arkid-data-be
+              subPath: metadatas
+      {{- if .Values.be.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.be.nodeSelector | indent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-local
+          configMap:
+            name: {{ template "arkid.fullname" . }}
+        - name: arkid-data-be
+          {{- if .Values.persistence.init }}
+          persistentVolumeClaim:
+            claimName: "{{ include "arkid.fullname" . }}"
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

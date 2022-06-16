@@ -1,0 +1,222 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "arkid.fullname" . }}
+  labels:
+    app: {{ template "arkid.name" . }}
+    chart: {{ template "arkid.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: |
+    {
+      "ARKID_DOMAIN": "http://{{ template "arkid.fullname" . }}-be/api/",
+      "LDAP_PORT": 1389,
+      "USER_ATTRIBUTES_MAPPING": {
+        "uid": "uuid"
+      },
+      "GROUP_ATTRIBUTES_MAPPING": {
+        "uid": "uuid"
+      },
+      "DEPARTMENT_ATTRIBUTES_MAPPING": {
+        "uid": "uuid"
+      }
+    }
+
+  fe.conf: |
+    server {
+        listen       80;
+        listen  [::]:80;
+        server_name  localhost;
+        #charset koi8-r;
+        #access_log  /var/log/nginx/host.access.log  main;
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+            try_files $uri /index.html;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+    }
+  settings_local.py: |
+    DEBUG = False
+    # mysql database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': '{{ include "arkid.databaseName" . }}',
+            'USER': '{{ include "arkid.databaseUser" . }}',
+            'PASSWORD': '{{ include "arkid.databasePassword" . }}',
+            'HOST': '{{ include "arkid.databaseHost" . }}',
+            'PORT': '{{ include "arkid.databasePort" . }}',
+            'OPTIONS': {
+                'autocommit': True,
+                'init_command': 'SET default_storage_engine=InnoDB',
+                'charset': 'utf8mb4',
+            },
+        }
+    }
+    # Redis cache
+    REDIS_CONFIG = {
+        'HOST': '{{ include "arkid.redisHost" . }}',
+        'PORT': {{ include "arkid.redisPort" . }},
+        'DB': {{ include "arkid.redisDB" . }},
+        'PASSWORD': None,
+    }
+
+    REDIS_URL = 'redis://{}:{}/{}'.format(REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'],\
+        REDIS_CONFIG['DB']) if REDIS_CONFIG['PASSWORD'] is None \
+            else 'redis://:{}@{}:{}/{}'.format(REDIS_CONFIG['PASSWORD'],\
+                REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'], REDIS_CONFIG['DB'])
+
+    # CELERY
+    CELERY_BROKER_URL = REDIS_URL
+    DOMAIN="{{ .Values.ingress.host.name }}"
+    PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
+
+  supervisordcelery.conf: |
+    [supervisord]
+    nodaemon=true
+
+    [program:worker]
+    command=celery -A tasks.celery worker -l debug
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    [program:scheduler]
+    command=celery -A tasks.celery beat -l debug
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    [unix_http_server]
+    file=/var/run/supervisor.sock
+    chmod=0700
+
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [supervisorctl]
+    serverurl=unix:///var/run/supervisor.sock
+  supervisord.conf: |
+    [supervisord]
+    nodaemon=true
+
+    [program:runserver]
+    command=/usr/local/bin/python3.8 manage.py runserver 0.0.0.0:80
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    [program:worker]
+    command=celery -A tasks.celery worker -l debug
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    [unix_http_server]
+    file=/var/run/supervisor.sock
+    chmod=0700
+
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [supervisorctl]
+    serverurl=unix:///var/run/supervisor.sock
+  arkid.local.toml: |
+    name = "arkid"
+    host = "{{ .Values.ingress.host.name }}"
+    frontend_host = "{{ .Values.ingress.host.name }}"
+    https_enabled = {{ include "httpsorNot" . }}
+    [email]
+    host = "smtp.qq.com"
+    port = 25
+    user = ""
+    password = ""
+    [extension]
+    root = "./extension_root"
+        [extension.demo]
+        config1 = 'demo_config1'
+        config2 = 'demo_config2'
+        [extension.aliyun]
+        access_key = ''
+        secret_key = ''
+        template = ''
+        signature = ''
+        [extension.redis_cache]
+        enabled = 1
+        host = '{{ include "arkid.redisHost" . }}'
+        port = {{ include "arkid.redisPort" . }}
+        db = {{ include "arkid.redisDB" . }}
+        [extension.feishu]
+        enabled = 1
+  default.conf: |
+    server {
+        listen       80;
+        set_real_ip_from 172.0.0.0/8;
+        real_ip_header   X-Real-IP;
+        location /superadmin/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}-be;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /api/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}-be;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /static/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}-be;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /siteapi/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}-be/siteapi/;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /ping/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}-be/ping/;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location /oauth/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}-be;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location = / {
+            proxy_pass http://{{ template "arkid.fullname" . }}-fe/index.html;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            expires 1m;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        location / {
+            proxy_pass http://{{ template "arkid.fullname" . }}-fe;
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
