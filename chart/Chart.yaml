@@ -1,11 +1,11 @@
 annotations:
   category: sso
-apiVersion: v2
+apiVersion: v2.5
 name: arkid
 description: ArkID is an enterprise SSO solutions, it supports LDAP, OpenID, SAML, OAuth and more
 type: application
-version: 2.0.0
-appVersion: "2.0.0"
+version: 2.5.0
+appVersion: "2.5.0"
 dependencies:
 - condition: mysql.enabled
   name: mysql
