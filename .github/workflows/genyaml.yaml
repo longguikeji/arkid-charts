@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 2.5-dev
+      - v2.5-dev
     paths:
       - 'chart/**'
 jobs:
