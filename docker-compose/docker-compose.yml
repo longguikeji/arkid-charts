@@ -18,7 +18,7 @@ services:
       - ${WORKSPACE}/portal.conf:/etc/nginx/conf.d/default.conf
 
   be:
-    image: harbor.longguikeji.com/ark-develops/arkid:2022-06-15-16-27-14
+    image: harbor.longguikeji.com/ark-develops/arkid:2022-06-17-18-40-21
     container_name: ${INSTANCE}-be
     sysctls:
       - net.core.somaxconn=65535
@@ -47,7 +47,7 @@ services:
 
 
   fe:
-    image: harbor.longguikeji.com/ark-develops/arkid-fe-vue3:2022-06-15-19-29-08
+    image: harbor.longguikeji.com/ark-develops/arkid-fe-vue3:2022-06-17-18-38-44
     container_name: ${INSTANCE}-fe
     restart: always
     environment:
@@ -76,22 +76,22 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
 
-  ldap:
-    image: longguikeji/arkid_ldap_server:v2dev
-    container_name: ${INSTANCE}-ldap
-    restart: always
-    environment:
-      - TZ=Asia/Shanghai
-    networks:
-      - arkid
-    depends_on:
-      - be
-    ports:
-      - ${LDAP_PORT}:1389
-    volumes:
-      - ${WORKSPACE}/ldapjs-config.json:/usr/src/app/config.json
-    environment:
-      - TZ=Asia/Shanghai
+  # ldap:
+  #   image: longguikeji/arkid_ldap_server:v2dev
+  #   container_name: ${INSTANCE}-ldap
+  #   restart: always
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   networks:
+  #     - arkid
+  #   depends_on:
+  #     - be
+  #   ports:
+  #     - ${LDAP_PORT}:1389
+  #   volumes:
+  #     - ${WORKSPACE}/ldapjs-config.json:/usr/src/app/config.json
+  #   environment:
+  #     - TZ=Asia/Shanghai
 
   redis:
     image: redis:5.0.3
