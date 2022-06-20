@@ -105,7 +105,7 @@ redis:
     pullPolicy: IfNotPresent
   cluster:
     enabled: false
-    slaveCount: 1
+    slaveCount: 0
   clusterDomain: cluster.local
   pullPolicy: IfNotPresent
   ## 主机标签
@@ -133,7 +133,7 @@ externalRedis:
   db: 0
 
 ldap:
-  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:2
+  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:2022-06-17-10-22-17
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
@@ -159,7 +159,7 @@ ldap:
   podAntiAffinity: {}
   
 be:
-  image: harbor.longguikeji.com/ark-develops/arkid:2022-06-15-16-27-14
+  image: harbor.longguikeji.com/ark-develops/arkid:2022-06-17-18-40-21
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -192,7 +192,7 @@ be:
     weight: 100
 
 fe:
-  image: harbor.longguikeji.com/ark-develops/arkid-fe-vue3:2022-06-15-19-29-08
+  image: harbor.longguikeji.com/ark-develops/arkid-fe-vue3:2022-06-17-18-38-44
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:

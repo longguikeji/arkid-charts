@@ -104,19 +104,26 @@ data:
 
     [supervisorctl]
     serverurl=unix:///var/run/supervisor.sock
-  supervisord.conf: |
+  supervisord.conf: |-
     [supervisord]
     nodaemon=true
 
-    [program:runserver]
-    command=/usr/local/bin/python3.8 manage.py runserver 0.0.0.0:80
+    [program:worker]
+    command=celery -A arkid.core.tasks.celery worker -l debug --is-init-permission=true
     stdout_logfile=/dev/stdout
     stdout_logfile_maxbytes=0
     stderr_logfile=/dev/stderr
     stderr_logfile_maxbytes=0
 
-    [program:worker]
-    command=celery -A tasks.celery worker -l debug
+    [program:scheduler]
+    command=celery -A arkid.core.tasks.celery beat -l debug
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    [program:runserver]
+    command=/usr/local/bin/python3.8 manage.py runserver 0.0.0.0:80 --noreload
     stdout_logfile=/dev/stdout
     stdout_logfile_maxbytes=0
     stderr_logfile=/dev/stderr
@@ -142,7 +149,8 @@ data:
     user = ""
     password = ""
     [extension]
-    root = "./extension_root"
+    root = ["./extension_root", "./arkid_extensions"]
+    install_dir = "./arkid_extensions"
         [extension.demo]
         config1 = 'demo_config1'
         config2 = 'demo_config2'
