@@ -10,14 +10,13 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 
 ### 1、docker-compose 方式部署
 ```shell
-## arkid v2.5
-git clone --branch v2.5-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
+git clone https://github.com/longguikeji/arkid-charts.git
 
 cd arkid-charts/docker-compose
 
 docker-compose up -d
 ```
-浏览器打开http://127.0.0.1:8989 探索ArkID 2.0 的完整功能。
+浏览器打开http://127.0.0.1:8989 探索 ArkID 的完整功能。
 
 ### 2、helm/charts 方式部署
 
@@ -29,8 +28,7 @@ docker-compose up -d
 - ReadWriteMany volumes for deployment scaling
 
 ```shell
-## arkid v2.5
-git clone --branch v2.5-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
+git clone https://github.com/longguikeji/arkid-charts.git
 
 cd arkid-charts/chart
 
@@ -48,4 +46,4 @@ Forwarding from 127.0.0.1:8989 -> 80
 Handling connection for 8989
 ```
 
-浏览器打开http://127.0.0.1:8989 探索ArkID 2.0 的完整功能。
+浏览器打开http://127.0.0.1:8989 探索 ArkID 的完整功能。

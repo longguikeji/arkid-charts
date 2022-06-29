@@ -1,6 +1,6 @@
 annotations:
   category: sso
-apiVersion: v2.5
+apiVersion: 2.5.0
 name: arkid
 description: ArkID is an enterprise SSO solutions, it supports LDAP, OpenID, SAML, OAuth and more
 type: application
@@ -23,4 +23,4 @@ sources:
 maintainers:
 - email: jiashuai@longguikeji.com
   name: notevery
-icon: https://raw.githubusercontent.com/longguikeji/arkid-charts/v2-dev/chart/assets/arkidlogo.png
+icon: https://raw.githubusercontent.com/longguikeji/arkid-charts/main/chart/assets/arkidlogo.png
