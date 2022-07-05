@@ -7,10 +7,10 @@ appVersion: "2.5.0"
 kubeVersion: ">= 1.13.0 < 1.21.12"
 description: ArkID is an enterprise SSO solutions, it supports LDAP, OpenID, SAML, OAuth and more
 type: application
-dependencies:
 keywords:
   - arkid
   - SSO
+dependencies:
 - condition: mysql.enabled
   name: mysql
   version: 8.8.26
