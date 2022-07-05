@@ -2,6 +2,9 @@
 
 ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系统多账号的烦恼, 节省管理成本, 自带功能全面的WEB管理界面，提升管理效率。
 
+## 版本说明
+本chart版本：1.X，2.X，3.X 不是平滑升级的，核心容器和数据结构都是不同的，不能跨版本升级。
+
 ## 项目说明
 
 - [arkid-frontend](https://github.com/longguikeji/arkid-frontend): 前端代码
