@@ -14,7 +14,7 @@ ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系�
 ### Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.1.0
+- Helm 3.7.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
