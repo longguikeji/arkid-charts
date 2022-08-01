@@ -214,6 +214,9 @@ fe:
     # Weight for `soft` anti-affinity rules.
     # Does not apply for other anti-affinity types.
     weight: 100
+docs:
+## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
+  enabled: true
 portal:
   image: nginx:alpine
   pullPolicy: IfNotPresent
