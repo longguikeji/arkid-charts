@@ -71,19 +71,18 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
   # ldap:
-  #   image: longguikeji/arkid_ldap_server:v2dev
+  #   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ldapjs:latest
   #   container_name: ${INSTANCE}-ldap
   #   restart: always
   #   environment:
   #     - TZ=Asia/Shanghai
+  #     - BEURL=http://be
   #   networks:
   #     - arkid
   #   depends_on:
   #     - be
   #   ports:
   #     - ${LDAP_PORT}:1389
-  #   volumes:
-  #     - ${WORKSPACE}/ldapjs-config.json:/usr/src/app/config.json
   #   environment:
   #     - TZ=Asia/Shanghai
   redis:

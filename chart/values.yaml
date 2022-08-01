@@ -125,7 +125,8 @@ externalRedis:
   port: 6379
   db: 0
 ldap:
-  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:2022-06-17-10-22-17
+  enabled: true
+  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:latest
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
