@@ -3,7 +3,7 @@
 ### docker-compose 方式部署
 ```shell
 ## arkid v2.5
-git clone --branch v2.5-dev --depth 1  https://github.com/longguikeji/arkid-charts.git
+git clone --branch main --depth 1  https://github.com/longguikeji/arkid-charts.git
 
 cd arkid-charts/docker-compose
 
