@@ -98,5 +98,3 @@ networks:
   arkid:
     name: ${INSTANCE}
     driver: bridge
-be:
-  image: ""
