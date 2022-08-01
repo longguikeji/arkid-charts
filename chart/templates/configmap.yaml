@@ -2,6 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "arkid.fullname" . }}
+  annotations:
+    "helm.sh/resource-policy": keep
   labels:
     app: {{ template "arkid.name" . }}
     chart: {{ template "arkid.chart" . }}

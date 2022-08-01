@@ -1,11 +1,15 @@
 annotations:
   category: sso
-apiVersion: 2.5.0
+apiVersion: v2
 name: arkid
+version: 3.0.5
+appVersion: "2.5.0"
+kubeVersion: ">= 1.13.0 < 1.21.12"
 description: ArkID is an enterprise SSO solutions, it supports LDAP, OpenID, SAML, OAuth and more
 type: application
-version: 2.5.0
-appVersion: "2.5.0"
+keywords:
+  - arkid
+  - SSO
 dependencies:
 - condition: mysql.enabled
   name: mysql
@@ -13,13 +17,9 @@ dependencies:
 - condition: redis.enabled
   name: redis
   version: 10.5.7
-keywords:
-  - arkid
-  - SSO
 home: https://saas.arkid.cc/
 sources:
   - https://github.com/longguikeji/arkid
-  - https://github.com/longguikeji/arkid-frontend
 maintainers:
 - email: jiashuai@longguikeji.com
   name: notevery
