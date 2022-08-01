@@ -70,6 +70,7 @@ services:
     command:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
+  ## 需要ldap功能的话将以下解除注释，需配合ldap插件使用
   # ldap:
   #   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ldapjs:latest
   #   container_name: ${INSTANCE}-ldap
@@ -93,6 +94,21 @@ services:
       - TZ=Asia/Shanghai
     networks:
       - arkid
+  docs:
+    image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:latest
+    container_name: ${INSTANCE}-docs
+    sysctls:
+      - net.core.somaxconn=65535
+    restart: always
+    command:
+      - mkdocs
+      - serve 
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - arkid
+    volumes:
+      - ${WORKSPACE}/mkdocs.yml:/var/arkid/mkdocs.yml
 networks:
   arkid:
     name: ${INSTANCE}
