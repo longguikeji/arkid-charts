@@ -28,8 +28,8 @@ data:
 {{- if .Values.docs.enabled -}}
   mkdocs.yml: |
     site_name: ArkID
-    site_url: http://0.0.0.0:8000/docs/
-    dev_addr: 0.0.0.0:8000
+    site_url: http://0.0.0.0:80/docs/
+    dev_addr: 0.0.0.0:80
     theme:
       name: "material"
       custom_dir: docs/overrides
