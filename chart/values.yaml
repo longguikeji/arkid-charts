@@ -1,17 +1,13 @@
 imagePullSecrets:
-
-
 # 持久化后端
 persistence:
   init: true
   storageClass:
   accessMode: ReadWriteOnce
   size: 8Gi
-
 initContainers:
   image: harbor.longguikeji.com/ark-releases/busybox:latest
   pullPolicy: IfNotPresent
-
 mysql:
   enabled: true
   image:
@@ -57,19 +53,19 @@ mysql:
     persistence:
       enabled: true
     ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
-    resources: {  "limits": {"cpu": "1000m","memory": "2048Mi"},"requests": {"cpu": "500m","memory": "1024Mi"}}
+    resources: {"limits": {"cpu": "1000m", "memory": "2048Mi"}, "requests": {"cpu": "500m", "memory": "1024Mi"}}
   secondary:
     persistence:
       enabled: true
     replicas: 1
-    resources: {  "limits": {"cpu": "1000m","memory": "1024Mi"},"requests": {"cpu": "500m","memory": "512Mi"}}
+    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "500m", "memory": "512Mi"}}
   ## 主机标签
   ## 要符合json格式，如：
   ## {
   ##   "nfs": "true",
   ##   "ip": "111.111.111.111"
   ## }
-  nodeSelector: {} 
+  nodeSelector: {}
   # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   nodeAffinity: {}
@@ -81,14 +77,12 @@ mysql:
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
-
 externalDatabase:
   host: ""
   port: 3306
   database: ""
   user: ""
   password: ""
-
 redis:
   enabled: true
   image:
@@ -126,14 +120,13 @@ redis:
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
-
 externalRedis:
   host: ""
   port: 6379
   db: 0
-
 ldap:
-  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:2022-06-17-10-22-17
+  enabled: true
+  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:latest
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
@@ -157,14 +150,13 @@ ldap:
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
-  
 be:
-  image: harbor.longguikeji.com/ark-releases/arkid:2.5.0
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:latest"
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
-    requests: {"cpu": "500m","memory": "1024Mi"}
+    requests: {"cpu": "500m", "memory": "1024Mi"}
   replicas: 1
   ## 主机标签
   ## 要符合json格式，如：
@@ -190,14 +182,13 @@ be:
     # Weight for `soft` anti-affinity rules.
     # Does not apply for other anti-affinity types.
     weight: 100
-
 fe:
-  image: harbor.longguikeji.com/ark-releases/arkid-fe-vue3:2.5.0 
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:latest
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
-    requests: {"cpu": "200m","memory": "1024Mi"}
+    requests: {"cpu": "200m", "memory": "1024Mi"}
   replicas: 1
   ## 主机标签
   ## 要符合json格式，如：
@@ -223,7 +214,9 @@ fe:
     # Weight for `soft` anti-affinity rules.
     # Does not apply for other anti-affinity types.
     weight: 100
-
+docs:
+## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
+  enabled: true
 portal:
   image: nginx:alpine
   pullPolicy: IfNotPresent
@@ -247,7 +240,6 @@ portal:
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
-
 celery:
   ## 定时任务，定制化功能
   enabled: false
@@ -260,35 +252,30 @@ celery:
   nodeSelector: {}
   resources:
     limits: {}
-    requests: {"cpu": "200m","memory": "1024Mi"}
-
-
+    requests: {"cpu": "200m", "memory": "1024Mi"}
 nameOverride: ""
 fullnameOverride: ""
-
 ingress:
   enabled: false
   # cert-manager 
   cert: false
   # 为空则使用 cert-manager生成的证书，不为空则使用指定的证书
   secret:
-  annotations: {"kubernetes.io/ingress.class": "nginx","certmanager.k8s.io/cluster-issuer": "letsencrypt-prod"}
+  annotations: {"kubernetes.io/ingress.class": "nginx", "certmanager.k8s.io/cluster-issuer": "letsencrypt-prod"}
   host:
     # 需要DNS解析到ingress的ip
     # 本地调试就在 /etc/hosts里配置一下
     name: arkid.cc
   # 如果没有 cert-manager，tls为true则helm会生成一个自签名的证书存到secret
   tls: false
-
 ingressroute:
   enabled: false
   host:
     # 需要DNS解析到ingress的ip
     # 本地调试就在 /etc/hosts里配置一下
     name: arkid.cc
-  tls: 
+  tls:
     enabled: true
     certResolver:
-
 ha:
   enabled: true

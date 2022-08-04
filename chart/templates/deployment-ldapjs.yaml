@@ -1,3 +1,4 @@
+{{- if .Values.ldap.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -75,6 +76,8 @@ spec:
       - env:
         - name: TZ
           value: Asia/Shanghai
+        - name: BEURL
+          value: http://be
         image: "{{ .Values.ldap.image }}"
         imagePullPolicy: {{ .Values.ldap.pullPolicy }}
         name: "{{ .Chart.Name }}-ldapjs"
@@ -91,3 +94,4 @@ spec:
           defaultMode: 420
           name: {{ template "arkid.fullname" . }}
         name: settings-local
+{{- end -}}

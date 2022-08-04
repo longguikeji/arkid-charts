@@ -1,0 +1,85 @@
+{{- if .Values.docs.enabled -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "arkid.fullname" . }}-docs
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-docs
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-docs
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "arkid.fullname" . }}-docs
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-docs
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-docs
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-docs
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      initContainers:
+      - image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        command:
+        - /bin/sh
+        - -c
+        - echo 65535 > /proc/sys/net/core/somaxconn
+        name: setsysctl
+        securityContext:
+          privileged: true
+      containers:
+        - name: "{{ .Chart.Name }}-docs"
+          image: "{{ .Values.be.image }}"
+          imagePullPolicy: {{ .Values.be.pullPolicy }}
+          env:
+            - name: TZ
+              value: 'Asia/Shanghai'
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          args:
+            - mkdocs
+            - serve
+          volumeMounts:
+            - mountPath: /var/arkid/arkid_extensions
+              name: arkid-data-be
+              subPath: arkid_extensions
+            - mountPath: /var/arkid/mkdocs.yml
+              name: settings-local
+              subPath: mkdocs.yml
+      volumes:
+        - name: settings-local
+          configMap:
+            name: {{ template "arkid.fullname" . }}
+        - name: arkid-data-be
+          {{- if .Values.persistence.init }}
+          persistentVolumeClaim:
+            claimName: "{{ include "arkid.fullname" . }}"
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+{{- end -}}
