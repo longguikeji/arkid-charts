@@ -124,6 +124,33 @@ spec:
               protocol: TCP
           resources: {{- toYaml .Values.be.resources | nindent 12 }}
           args: ["supervisord"]
+          startupProbe:
+            failureThreshold: 12
+            httpGet:
+              path: /api/v1/ping/
+              port: 80
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /api/v1/ping/
+              port: 80
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /api/v1/ping/
+              port: 80
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: "settings-local"
               mountPath: "/var/arkid/settings_local.py"
