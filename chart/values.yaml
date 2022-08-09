@@ -183,7 +183,7 @@ be:
     # Does not apply for other anti-affinity types.
     weight: 100
 fe:
-  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:latest
+  image: ""
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -215,7 +215,7 @@ fe:
     # Does not apply for other anti-affinity types.
     weight: 100
 docs:
-## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
+  ## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
   enabled: true
 portal:
   image: nginx:alpine
