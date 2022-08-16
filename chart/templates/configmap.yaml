@@ -107,6 +107,7 @@ data:
     extra_css:
       - stylesheets/extra.css
 {{- end -}}
+
   fe.conf: |
     server {
         listen       80;
@@ -225,7 +226,7 @@ data:
     name = "arkid"
     host = "{{ .Values.ingress.host.name }}"
     frontend_host = "{{ .Values.ingress.host.name }}"
-    backend_host = localhost:80
+    backend_host = "localhost:80"
     https_enabled = {{ include "httpsorNot" . }}
     [email]
     host = "smtp.qq.com"
