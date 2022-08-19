@@ -43,7 +43,7 @@ services:
       - ${WORKSPACE}/be/be:/data
       - ${WORKSPACE}/be/arkidextensions:/var/arkid/arkid_extensions
   fe:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.5.3"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.5.4"
     container_name: ${INSTANCE}-fe
     restart: always
     environment:
