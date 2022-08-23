@@ -53,12 +53,12 @@ mysql:
     persistence:
       enabled: true
     ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
-    resources: {"limits": {"cpu": "1000m", "memory": "2048Mi"}, "requests": {"cpu": "500m", "memory": "1024Mi"}}
+    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "512Mi"}}
   secondary:
     persistence:
       enabled: true
     replicas: 1
-    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "500m", "memory": "512Mi"}}
+    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "512Mi"}}
   ## 主机标签
   ## 要符合json格式，如：
   ## {
@@ -156,7 +156,7 @@ be:
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
-    requests: {"cpu": "500m", "memory": "1024Mi"}
+    requests: {"cpu": "100m", "memory": "256Mi"}
   replicas: 1
   ## 主机标签
   ## 要符合json格式，如：
@@ -188,7 +188,7 @@ fe:
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
     limits: {}
-    requests: {"cpu": "200m", "memory": "1024Mi"}
+    requests: {"cpu": "100m", "memory": "256Mi"}
   replicas: 1
   ## 主机标签
   ## 要符合json格式，如：
@@ -252,7 +252,7 @@ celery:
   nodeSelector: {}
   resources:
     limits: {}
-    requests: {"cpu": "200m", "memory": "1024Mi"}
+    requests: {"cpu": "100m", "memory": "256Mi"}
 nameOverride: ""
 fullnameOverride: ""
 ingress:
