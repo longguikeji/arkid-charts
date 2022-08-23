@@ -7,11 +7,18 @@ metadata:
   name: {{ $fullName }}
 spec:
   entryPoints:
+    - web
     - websecure
   routes:
     - kind: Rule
-      match: Host(`{{ $domain }}`)
+      match: HostRegexp(`{{ $domain }}`, `{subdomain:[a-zA-Z0-9-]+}.{{ $domain }}`)
       priority: 11
+      services:
+        - name: {{ $fullName }}-portal
+          port: 80
+    - kind: Rule
+      match: Host(`*.{{ $domain }}`)
+      priority: 10
       services:
         - name: {{ $fullName }}-portal
           port: 80
