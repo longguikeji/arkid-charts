@@ -22,6 +22,12 @@ spec:
       services:
         - name: {{ $fullName }}-portal
           port: 80
+    - kind: Rule
+      match: Host(`{{ $domain }}`)
+      priority: 12
+      services:
+        - name: {{ $fullName }}-portal
+          port: 80
 {{- if .Values.ingressroute.tls.enabled }}
   tls:
     certResolver: {{ .Values.ingressroute.tls.certResolver }}
