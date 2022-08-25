@@ -118,6 +118,8 @@ spec:
           env:
             - name: TZ
               value: 'Asia/Shanghai'
+            - name: K8SORDC
+              value: 'true'
           ports:
             - name: http
               containerPort: 80
