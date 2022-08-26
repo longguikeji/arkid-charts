@@ -24,6 +24,7 @@ services:
     command: supervisord
     environment:
       - TZ=Asia/Shanghai
+      - K8SORDC='true'
       - MYSQL_HOST=${INSTANCE}-db
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=arkid
