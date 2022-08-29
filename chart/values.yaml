@@ -151,7 +151,7 @@ ldap:
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
 be:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.5.6"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.5.7"
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
