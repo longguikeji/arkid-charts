@@ -183,7 +183,7 @@ be:
     # Does not apply for other anti-affinity types.
     weight: 100
 fe:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.5.12-fix"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.5.13"
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
