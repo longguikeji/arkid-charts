@@ -16,7 +16,7 @@ services:
     volumes:
       - ${WORKSPACE}/portal.conf:/etc/nginx/conf.d/default.conf
   be:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.5.12-fix"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.5.13"
     container_name: ${INSTANCE}-be
     sysctls:
       - net.core.somaxconn=65535
