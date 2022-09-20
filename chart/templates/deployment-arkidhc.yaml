@@ -1,0 +1,47 @@
+{{- if .Values.celery.enabled -}}
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: {{ include "arkid.name" . }}-ahc
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-ahc
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-ahc
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "arkid.name" . }}-ahc
+  labels:
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-ahc
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-ahc
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-ahc
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ include "arkid.name" . }}-ahc
+          image: {{ .Values.ahc.image }}
+{{- end }}
