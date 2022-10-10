@@ -1,0 +1,31 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: arkid
+  namespace: kube-system
+spec:
+  chart: arkid
+  version: 3.0.16
+  repo: https://harbor.longguikeji.com/chartrepo/public
+  targetNamespace: arkid
+  valuesContent: |-
+    persistence:
+      init: true
+      storageClass:
+      accessMode: ReadWriteOnce
+      size: 8Gi
+    be:
+      resources:
+        limits: {}
+        requests: {"cpu": "100m", "memory": "256Mi"}
+    fe:
+      resources:
+        limits: {}
+        requests: {"cpu": "100m", "memory": "256Mi"}
+    mysql:
+      primary:
+        persistence:
+          enabled: true
+        resources:
+          limits: {}
+          requests: {"cpu": "100m", "memory": "256Mi"}
