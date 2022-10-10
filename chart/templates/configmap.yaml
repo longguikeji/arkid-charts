@@ -290,6 +290,7 @@ data:
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
+        {{ if .Values.docs.enabled -}}
         location /docs/ {
             proxy_pass http://{{ template "arkid.fullname" . }}-docs;
             proxy_set_header Host $host;
@@ -297,6 +298,7 @@ data:
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
+        {{ end -}}
         location /oauth/ {
             proxy_pass http://{{ template "arkid.fullname" . }}-be;
             proxy_set_header Host $host;

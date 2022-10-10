@@ -126,7 +126,7 @@ externalRedis:
   db: 0
 ldap:
   enabled: true
-  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:latest
+  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:2022-06-17-10-22-17
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
@@ -151,7 +151,7 @@ ldap:
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
 be:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:latest"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.5.17"
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -183,7 +183,7 @@ be:
     # Does not apply for other anti-affinity types.
     weight: 100
 fe:
-  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:latest
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.5.17
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -216,7 +216,7 @@ fe:
     weight: 100
 docs:
 ## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
-  enabled: true
+  enabled: false
 portal:
   image: nginx:alpine
   pullPolicy: IfNotPresent
@@ -240,9 +240,9 @@ portal:
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
-celery:
-  ## 定时任务，定制化功能
-  enabled: false
+tasks:
+  image: harbor.longguikeji.com/ark-releases/nginx:reload2
+  pullPolicy: IfNotPresent
   ## 主机标签
   ## 要符合json格式，如：
   ## {
@@ -252,7 +252,7 @@ celery:
   nodeSelector: {}
   resources:
     limits: {}
-    requests: {"cpu": "200m", "memory": "1024Mi"}
+    requests: {"cpu": "100m", "memory": "1024Mi"}
 nameOverride: ""
 fullnameOverride: ""
 ingress:

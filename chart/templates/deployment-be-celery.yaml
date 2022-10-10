@@ -1,91 +1,52 @@
-{{- if .Values.celery.enabled -}}
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "arkid.fullname" . }}-be-celery
-  labels:
-    app.kubernetes.io/name: {{ include "arkid.name" . }}-be-celery
-    helm.sh/chart: {{ include "arkid.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "arkid.fullname" . }}-celery
 spec:
-  type: ClusterIP
   ports:
-    - port: 80
-      targetPort: 80
-      protocol: TCP
-      name: http
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
   selector:
-    app.kubernetes.io/name: {{ include "arkid.name" . }}-be-celery
+    app.kubernetes.io/name: {{ include "arkid.name" . }}-celery
     app.kubernetes.io/instance: {{ .Release.Name }}
+  sessionAffinity: None
+  type: ClusterIP
 ---
-apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "arkid.fullname" . }}-be-celery
   labels:
     app.kubernetes.io/name: {{ include "arkid.name" . }}-be-celery
     helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "arkid.fullname" . }}-celery
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "arkid.name" . }}-be-celery
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-celery
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "arkid.name" . }}-be-celery
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-celery
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      initContainers:
-      - image: {{ .Values.initContainers.image }}
-        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
-        command:
-        - /bin/sh
-        - -c
-        - echo 65535 > /proc/sys/net/core/somaxconn
-        name: setsysctl
-        securityContext:
-          privileged: true
-      - command:
-          - /bin/sh
-          - '-c'
-          - "until nc -z -w 2 {{ include "arkid.fullname" . }}-be 80 && echo {{ include "arkid.fullname" . }}-be ok; do sleep 2; done;"
-        image: {{ .Values.initContainers.image }}
-        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
-        name: check-be
       containers:
-        - name: "{{ .Chart.Name }}-be-celery"
-          image: "{{ .Values.be.image }}"
-          imagePullPolicy: {{ .Values.be.pullPolicy }}
-          env:
-            - name: TZ
-              value: 'Asia/Shanghai'
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          resources: {{- toYaml .Values.celery.resources | nindent 12 }}
-          command: ["celery", "-A", "tasks.celery", "beat"]
-          volumeMounts:
-            - name: "settings-local"
-              mountPath: "/var/arkid/settings_local.py"
-              subPath: "settings_local.py"
-            - name: "settings-local"
-              mountPath: "/var/arkid/arkid.local.toml"
-              subPath: "arkid.local.toml"
-            - name: "settings-local"
-              mountPath: "/var/arkid/supervisord.conf"
-              subPath: "supervisordcelery.conf"
-      {{- if .Values.celery.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.celery.nodeSelector | indent 8 }}
-      {{- end }}
+      - env:
+        - name: TZ
+          value: Asia/Shanghai
+        image: {{ .Values.tasks.image }}
+        imagePullPolicy: IfNotPresent
+        name: {{ include "arkid.name" . }}-celery
+        volumeMounts:
+        - mountPath: /var/arkid/settings_local.py
+          name: settings-local
+          subPath: settings_local.py
+        resources: {{- toYaml .Values.tasks.resources | nindent 12 }}
       volumes:
-        - name: settings-local
-          configMap:
-            name: {{ template "arkid.fullname" . }}
-{{- end -}}
+      - configMap:
+          name: {{ template "arkid.fullname" . }}
+        name: settings-local
