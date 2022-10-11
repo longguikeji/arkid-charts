@@ -2,7 +2,7 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: arkid
-  namespace: kube-system
+  namespace: arkid
 spec:
   chart: arkid
   version: 3.0.16
