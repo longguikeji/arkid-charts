@@ -52,6 +52,18 @@ services:
       - ${WORKSPACE}/be/metadatas:/var/arkid/extension_root/saml2/metadatas
       - ${WORKSPACE}/be/be:/data
       - ${WORKSPACE}/be/arkidextensions:/var/arkid/arkid_extensions
+  celery:
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:2022-10-12-17-48-37"
+    container_name: ${INSTANCE}-celery
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - arkid
+    depends_on:
+      - db
+    volumes:
+      - ${WORKSPACE}/settings_local.py:/var/arkid/settings_local.py
   fe:
     image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.0"
     container_name: ${INSTANCE}-fe

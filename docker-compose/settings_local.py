@@ -54,3 +54,4 @@ REDIS_URL = 'redis://{}:{}/{}'.format(REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT']
 
 # CELERY
 CELERY_BROKER_URL = REDIS_URL
+CELERY_IMPORTS = ('tasks.tasks',)
