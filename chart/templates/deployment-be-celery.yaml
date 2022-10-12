@@ -1,4 +1,3 @@
-{{ if false }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -51,4 +50,4 @@ spec:
       - configMap:
           name: {{ template "arkid.fullname" . }}
         name: settings-local
-{{ end }}
+        

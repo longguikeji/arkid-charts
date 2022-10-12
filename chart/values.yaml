@@ -53,12 +53,12 @@ mysql:
     persistence:
       enabled: true
     ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
-    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "512Mi"}}
+    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "200Mi"}}
   secondary:
     persistence:
       enabled: true
     replicas: 1
-    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "512Mi"}}
+    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "200Mi"}}
   ## 主机标签
   ## 要符合json格式，如：
   ## {
@@ -240,9 +240,13 @@ portal:
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
-celery:
-  ## 定时任务，定制化功能
-  enabled: false
+desktop:
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.2
+  resources:
+    limits: {}
+    requests: {"cpu": "100m", "memory": "124Mi"}
+tasks:
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:2022-10-12-17-48-37
   ## 主机标签
   ## 要符合json格式，如：
   ## {
