@@ -58,6 +58,13 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
+      - K8SORDC='true'
+      - MYSQL_HOST=${INSTANCE}-db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=arkid
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - REDIS_HOST=${INSTANCE}-redis
     networks:
       - arkid
     depends_on:
