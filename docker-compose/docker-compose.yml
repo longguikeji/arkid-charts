@@ -16,7 +16,7 @@ services:
     volumes:
       - ${WORKSPACE}/portal.conf:/etc/nginx/conf.d/default.conf
   desktop:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.2"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.3"
     container_name: ${INSTANCE}-desktop
     environment:
       - TZ=Asia/Shanghai
@@ -30,7 +30,7 @@ services:
     sysctls:
       - net.core.somaxconn=65535
     restart: always
-    command: supervisord
+    entrypoint: /entrypoint.sh -d db:3306 -c '/usr/bin/supervisord';
     environment:
       - TZ=Asia/Shanghai
       - K8SORDC='true'
@@ -52,10 +52,12 @@ services:
       - ${WORKSPACE}/be/metadatas:/var/arkid/extension_root/saml2/metadatas
       - ${WORKSPACE}/be/be:/data
       - ${WORKSPACE}/be/arkidextensions:/var/arkid/arkid_extensions
+      - ./entrypoint.sh:/entrypoint.sh
   celery:
     image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:2022-10-12-17-48-37"
     container_name: ${INSTANCE}-celery
     restart: always
+    entrypoint: /entrypoint.sh -d be:80 -c '/usr/local/bin/celery -A arkid.core.tasks.celery worker --loglevel=info -B';
     environment:
       - TZ=Asia/Shanghai
       - K8SORDC='true'
@@ -71,6 +73,7 @@ services:
       - db
     volumes:
       - ${WORKSPACE}/settings_local.py:/var/arkid/settings_local.py
+      - ./entrypoint.sh:/entrypoint.sh
   fe:
     image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.0"
     container_name: ${INSTANCE}-fe
