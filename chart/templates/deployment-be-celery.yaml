@@ -50,4 +50,13 @@ spec:
       - configMap:
           name: {{ template "arkid.fullname" . }}
         name: settings-local
+      initContainers:
+      - command:
+          - /bin/sh
+          - '-c'
+          - "until nc -z -w 2 {{ include "arkid.fullname" . }}-be 80 && echo {{ include "arkid.fullname" . }}-be ok; do sleep 2; done;"
+        image: {{ .Values.initContainers.image }}
+        imagePullPolicy: {{ .Values.initContainers.pullPolicy }}
+        name: check-be
         
+
