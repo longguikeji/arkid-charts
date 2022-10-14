@@ -74,7 +74,7 @@ services:
       - ${WORKSPACE}/settings_local.py:/var/arkid/settings_local.py
       - ${WORKSPACE}/be/arkidextensions:/var/arkid/arkid_extensions
   fe:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.0"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.2"
     container_name: ${INSTANCE}-fe
     restart: always
     environment:
