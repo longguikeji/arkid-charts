@@ -109,19 +109,12 @@ data:
     DOMAIN="{{ .Values.ingress.host.name }}"
     PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
     CELERY_IMPORTS = ('tasks.tasks',)
-  supervisordcelery.conf: |
+  supervisordcelery.conf: |-
     [supervisord]
     nodaemon=true
 
-    [program:worker]
-    command=celery -A tasks.celery worker -l debug
-    stdout_logfile=/dev/stdout
-    stdout_logfile_maxbytes=0
-    stderr_logfile=/dev/stderr
-    stderr_logfile_maxbytes=0
-
-    [program:scheduler]
-    command=celery -A tasks.celery beat -l debug
+    [program:celery]
+    command=/usr/local/bin/celery -A arkid.core.tasks.celery worker --loglevel=info -B
     stdout_logfile=/dev/stdout
     stdout_logfile_maxbytes=0
     stderr_logfile=/dev/stderr
@@ -136,6 +129,7 @@ data:
 
     [supervisorctl]
     serverurl=unix:///var/run/supervisor.sock
+
   supervisord.conf: |-
     [supervisord]
     nodaemon=true

@@ -35,13 +35,21 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
-      - env:
+      - command:
+        - supervisord
+        env:
         - name: TZ
           value: Asia/Shanghai
         image: {{ .Values.tasks.image }}
         imagePullPolicy: IfNotPresent
         name: {{ include "arkid.name" . }}-celery
         volumeMounts:
+        - mountPath: /var/arkid/supervisord.conf
+          name: settings-local
+          subPath: supervisordcelery.conf
+        - mountPath: /var/arkid/arkid_extensions
+          name: arkid-data-be
+          subPath: arkid_extensions
         - mountPath: /var/arkid/settings_local.py
           name: settings-local
           subPath: settings_local.py
@@ -50,6 +58,13 @@ spec:
       - configMap:
           name: {{ template "arkid.fullname" . }}
         name: settings-local
+      - name: arkid-data-be
+        {{- if .Values.persistence.init }}
+        persistentVolumeClaim:
+          claimName: "{{ include "arkid.fullname" . }}"
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
       initContainers:
       - command:
           - /bin/sh
