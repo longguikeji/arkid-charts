@@ -16,7 +16,7 @@ services:
     volumes:
       - ${WORKSPACE}/portal.conf:/etc/nginx/conf.d/default.conf
   desktop:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:main"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.5"
     container_name: ${INSTANCE}-desktop
     environment:
       - TZ=Asia/Shanghai
