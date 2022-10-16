@@ -241,7 +241,7 @@ portal:
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
 desktop:
-  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:main
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.6
   resources:
     limits: {}
     requests: {"cpu": "100m", "memory": "124Mi"}
