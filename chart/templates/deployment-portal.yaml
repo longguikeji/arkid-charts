@@ -42,10 +42,6 @@ spec:
         app.kubernetes.io/name: {{ include "arkid.name" . }}-portal
         app.kubernetes.io/instance: {{ .Release.Name }}-portal
     spec:
-      {{- if .Values.portal.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.portal.nodeSelector | indent 8 }}
-      {{- end }}
     {{- if or .Values.portal.nodeAffinity .Values.portal.podAffinity .Values.portal.podAntiAffinity }}
       affinity:
       {{- with .Values.portal.nodeAffinity }}

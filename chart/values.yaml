@@ -242,6 +242,8 @@ portal:
   podAntiAffinity: {}
 desktop:
   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.6
+  pullPolicy: IfNotPresent
+  nodeSelector: {}
   resources:
     limits: {}
     requests: {"cpu": "100m", "memory": "124Mi"}
