@@ -282,11 +282,11 @@ ingressroute:
     enabled: true
     certResolver:
 ## 
-hc:
-  enabled: false
-  image: harbor.longguikeji.com/ark-releases/helm-controller:v0.12.1
+# hc:
+#   enabled: false
+#   image: harbor.longguikeji.com/ark-releases/helm-controller:v0.12.1
 ahc:
-  enabled: false
+  enabled: enable
   image: harbor.longguikeji.com/ark-releases/arkid-helm-controller:0.0.1
 ha:
   enabled: true
