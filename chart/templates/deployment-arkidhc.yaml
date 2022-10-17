@@ -1,4 +1,4 @@
-{{- if .Values.celery.enabled -}}
+{{- if .Values.ahc.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Service
