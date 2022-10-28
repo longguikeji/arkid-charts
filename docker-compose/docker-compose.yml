@@ -53,7 +53,7 @@ services:
       - ${WORKSPACE}/be/be:/data
       - ${WORKSPACE}/be/arkidextensions:/var/arkid/arkid_extensions
   celery:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:1.0.0"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:dev"
     container_name: ${INSTANCE}-celery
     restart: always
     entrypoint: /entrypoint.sh -d be:80 -c 'supervisord';
