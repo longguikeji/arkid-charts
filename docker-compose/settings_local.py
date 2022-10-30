@@ -40,17 +40,17 @@ REDIS_URL = 'redis://{}:{}/{}'.format(REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT']
             REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'], REDIS_CONFIG['DB'])
 
 
-#CACHES = {
-#    "default": {
-#        "BACKEND": "django_redis.cache.RedisCache",
-#        "LOCATION": REDIS_URL,
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"{REDIS_URL}/1",
 #        "TIMEOUT": 60 * 60 * 24 * 3,
 #        "OPTIONS": {
 #            "MAX_ENTRIES": None,
 #            "CLIENT_CLASS": "django_redis.client.DefaultClient",
 #        }
-#    }
-#}
+    }
+}
 
 # CELERY
 CELERY_BROKER_URL = REDIS_URL
