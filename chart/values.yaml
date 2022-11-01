@@ -248,7 +248,7 @@ desktop:
     limits: {}
     requests: {"cpu": "100m", "memory": "124Mi"}
 tasks:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:1.0.1"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:dev"
   ## 主机标签
   ## 要符合json格式，如：
   ## {
