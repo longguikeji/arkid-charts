@@ -163,7 +163,7 @@ data:
     user = ""
     password = ""
     [extension]
-    root = ["./extension_root", "./arkid_extensions"]
+    root = ["./arkid_extensions", "./extension_root"]
     install_dir = "./arkid_extensions"
         [extension.demo]
         config1 = 'demo_config1'
