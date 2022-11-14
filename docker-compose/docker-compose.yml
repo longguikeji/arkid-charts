@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   portal:
-    image: nginx:alpine
+    image: harbor.longguikeji.com/ark-releases/nginx:reload2
     container_name: ${INSTANCE}-portal
     restart: always
     environment:
