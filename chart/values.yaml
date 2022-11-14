@@ -183,7 +183,7 @@ be:
     # Does not apply for other anti-affinity types.
     weight: 100
 fe:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.4"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.5"
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -283,7 +283,6 @@ ingressroute:
   tls:
     enabled: true
     certResolver:
-
 hc:
   enabled: true
   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-helm-controller:prod-2022-11-14-11-09-12

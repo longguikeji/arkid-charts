@@ -76,7 +76,7 @@ services:
       - ${WORKSPACE}/supervisordcelery.conf:/var/arkid/supervisord.conf
       - ${WORKSPACE}/be/arkidextensions:/var/arkid/arkid_extensions
   fe:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.4"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-fe:2.6.5"
     container_name: ${INSTANCE}-fe
     restart: always
     environment:
