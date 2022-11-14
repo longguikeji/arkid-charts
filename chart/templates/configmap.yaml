@@ -103,7 +103,12 @@ data:
         REDIS_CONFIG['DB']) if REDIS_CONFIG['PASSWORD'] is None \
             else 'redis://:{}@{}:{}/{}'.format(REDIS_CONFIG['PASSWORD'],\
                 REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'], REDIS_CONFIG['DB'])
-
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": f"{REDIS_URL}/1",
+        }
+    }
     # CELERY
     CELERY_BROKER_URL = REDIS_URL
     DOMAIN="{{ .Values.ingress.host.name }}"
