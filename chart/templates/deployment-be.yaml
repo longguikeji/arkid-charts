@@ -120,6 +120,10 @@ spec:
               value: 'Asia/Shanghai'
             - name: K8SORDC
               value: 'true'
+            - name: ARKID_AHC
+              value: "{{ include "arkid.fullname" . }}-hc"
+            - name: ARKIDBESVC
+              value: {{ include "arkid.fullname" . }}-be
           ports:
             - name: http
               containerPort: 80
@@ -148,6 +152,8 @@ spec:
             - mountPath: /var/arkid/extension_root/saml2/metadatas
               name: arkid-data-be
               subPath: metadatas
+            - mountPath: /nginx
+              name: portal-config
       {{- if .Values.be.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.be.nodeSelector | indent 8 }}
@@ -160,6 +166,13 @@ spec:
           {{- if .Values.persistence.init }}
           persistentVolumeClaim:
             claimName: "{{ include "arkid.fullname" . }}"
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: portal-config
+          {{- if .Values.persistence.init }}
+          persistentVolumeClaim:
+            claimName: "{{ include "arkid.fullname" . }}-portal"
           {{- else }}
           emptyDir: {}
           {{- end }}

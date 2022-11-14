@@ -1,0 +1,73 @@
+{{- if .Values.hc.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "{{ include "arkid.fullname" . }}-hc"
+---
+apiVersion: {{ template "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRoleBinding
+metadata:
+  name: "{{ include "arkid.fullname" . }}-hc"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: {{ include "arkid.fullname" . }}-hc
+  namespace: "{{ .Release.Namespace }}"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "arkid.fullname" . }}-hc"
+  labels:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-hc"
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}-hc"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-hc"
+    app.kubernetes.io/instance: "{{ .Release.Name }}-hc"
+---
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "arkid.fullname" . }}-hc
+  labels:
+    app.kubernetes.io/name: "{{ include "arkid.name" . }}-hc"
+    helm.sh/chart: {{ include "arkid.chart" . }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}-hc"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "arkid.name" . }}-hc
+      app.kubernetes.io/instance: {{ .Release.Name }}-hc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "arkid.name" . }}-hc
+        app.kubernetes.io/instance: {{ .Release.Name }}-hc
+    spec:
+      {{- if .Values.hc.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.hc.nodeSelector | indent 8 }}
+      {{- end }}
+      containers:
+        - name: "{{ .Chart.Name }}-hc"
+          image: "{{ .Values.hc.image}}"
+          imagePullPolicy: {{ .Values.hc.pullPolicy }}
+          env:
+            - name: TZ
+              value: 'Asia/Shanghai'
+          serviceAccount: "{{ include "arkid.fullname" . }}-hc"
+          serviceAccountName: "{{ include "arkid.fullname" . }}-hc"
+{{- end }}

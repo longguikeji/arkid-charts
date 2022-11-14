@@ -292,3 +292,12 @@ ahc:
   image: harbor.longguikeji.com/ark-releases/arkid-helm-controller:0.0.1
 ha:
   enabled: true
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-helm-controller:prod-2022-11-14-11-09-12
+  pullPolicy: IfNotPresent
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {}

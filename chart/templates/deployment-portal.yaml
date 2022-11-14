@@ -63,6 +63,8 @@ spec:
             - name: TZ
               value: 'Asia/Shanghai'
           volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: portal-config
             - name: settings-local
               mountPath: "/etc/nginx/conf.d/default.conf"
               subPath: "default.conf"
@@ -74,3 +76,10 @@ spec:
         - name: settings-local
           configMap:
             name: "{{ template "arkid.fullname" . }}"
+        - name: portal-config
+          {{- if .Values.persistence.init }}
+          persistentVolumeClaim:
+            claimName: "{{ include "arkid.fullname" . }}-portal"
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

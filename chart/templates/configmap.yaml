@@ -114,6 +114,7 @@ data:
     DOMAIN="{{ .Values.ingress.host.name }}"
     PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
     CELERY_IMPORTS = ('tasks.tasks',)
+    K8S_INSTALL_APP_URL = "http://{{ include "arkid.fullname" . }}-hc"
   supervisordcelery.conf: |-
     [supervisord]
     nodaemon=true
