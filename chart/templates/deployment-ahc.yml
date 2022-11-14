@@ -68,6 +68,5 @@ spec:
           env:
             - name: TZ
               value: 'Asia/Shanghai'
-          serviceAccount: "{{ include "arkid.fullname" . }}-hc"
-          serviceAccountName: "{{ include "arkid.fullname" . }}-hc"
+      serviceAccount: "{{ include "arkid.fullname" . }}-hc"
 {{- end }}
