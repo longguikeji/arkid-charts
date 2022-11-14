@@ -283,14 +283,8 @@ ingressroute:
   tls:
     enabled: true
     certResolver:
-## 
-# hc:
-#   enabled: false
-#   image: harbor.longguikeji.com/ark-releases/helm-controller:v0.12.1
-ahc:
-  enabled: enable
-  image: harbor.longguikeji.com/ark-releases/arkid-helm-controller:0.0.1
-ha:
+
+hc:
   enabled: true
   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-helm-controller:prod-2022-11-14-11-09-12
   pullPolicy: IfNotPresent
