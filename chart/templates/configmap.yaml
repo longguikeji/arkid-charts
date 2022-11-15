@@ -187,6 +187,7 @@ data:
         [extension.feishu]
         enabled = 1
   default.conf: |
+    server_names_hash_bucket_size 128;
     server {
         listen       80 default;
         set_real_ip_from 172.0.0.0/8;
