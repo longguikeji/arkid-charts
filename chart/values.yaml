@@ -281,8 +281,8 @@ ingressroute:
     # 本地调试就在 /etc/hosts里配置一下
     name: arkid.cc
   tls:
-    enabled: true
-    certResolver:
+    enabled: false
+    certResolver: ali
 hc:
   enabled: true
   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-helm-controller:2.6.5
