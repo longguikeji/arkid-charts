@@ -218,7 +218,7 @@ docs:
   ## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
   enabled: true
 portal:
-  image: nginx:alpine
+  image: harbor.longguikeji.com/ark-releases/nginx:reload2
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
