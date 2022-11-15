@@ -153,7 +153,8 @@ spec:
               name: arkid-data-be
               subPath: metadatas
             - mountPath: /nginx
-              name: portal-config
+              name: arkid-data-be
+              subPath: nginx
       {{- if .Values.be.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.be.nodeSelector | indent 8 }}
@@ -166,13 +167,6 @@ spec:
           {{- if .Values.persistence.init }}
           persistentVolumeClaim:
             claimName: "{{ include "arkid.fullname" . }}"
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
-        - name: portal-config
-          {{- if .Values.persistence.init }}
-          persistentVolumeClaim:
-            claimName: "{{ include "arkid.fullname" . }}-portal"
           {{- else }}
           emptyDir: {}
           {{- end }}
