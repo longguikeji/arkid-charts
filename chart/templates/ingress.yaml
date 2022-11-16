@@ -38,6 +38,23 @@ spec:
               serviceName: {{ $fullName }}-portal 
               servicePort: 80
               {{- end }}
+    - host: "*.{{ $domain }}"
+      http:
+        paths:
+          - path: /
+            {{- if $ingressSupportsPathType }}
+            pathType: Prefix
+            {{- end }}
+            backend:
+              {{- if $apiIsStable }}
+              service:
+                name: {{ $fullName }}-portal
+                port:
+                  number: 80
+              {{- else }}
+              serviceName: {{ $fullName }}-portal 
+              servicePort: 80
+              {{- end }}
   {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned) }}
   tls:
     - hosts:

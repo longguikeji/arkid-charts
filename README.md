@@ -27,23 +27,39 @@ docker-compose up -d
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
+#### 安装CRD
 ```shell
-git clone https://github.com/longguikeji/arkid-charts.git
-
-cd arkid-charts/chart
-
-helm install arkidv2 . \
---set persistence.init=true \
---set ingress.cert=false \
---set ingress.tls=false \
---set ingress.host.name=arkid.yourcompany.com
+CHARTCRD=`kubectl get crd|grep helmcharts.helm.cattle.io`
+if [ -z "$CHARTCRD" ];then
+    kubectl create -f https://gitee.com/longguikeji/arkid-charts/raw/main/helmchartscrd.yaml
+fi
 ```
 
+#### 部署arkid
+```shell
+kubectl create ns arkid
+kubectl create -f https://gitee.com/longguikeji/arkid-charts/raw/main/arkid.yaml
+
+```
+
+#### 访问arkid
+> 注意：首次访问时，确认访问地址之后就不能再更改了
+
+- 通过port-forward
+> 只能再试用时使用这种方式访问
 
 ```shell
-> kubectl port-forward svc/arkid-portal  8989:80
+> kubectl -n arkid port-forward svc/arkid-portal  8989:80
 Forwarding from 127.0.0.1:8989 -> 80
 Handling connection for 8989
 ```
 
 浏览器打开http://127.0.0.1:8989 探索 ArkID 的完整功能。
+
+- 通过nodeport 32580
+> arkid默认会打开nodeport 32580
+> http://某个nodeip:32580
+
+- 通过ingress
+> 查看chart/values.yaml 中的配置项，设置ingress
+> kubectl -n arkid edit helmchart arkid
