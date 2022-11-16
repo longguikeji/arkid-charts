@@ -14,20 +14,12 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.ingress.annotations }}
   annotations:
-    nginx.ingress.kubernetes.io/server-alias: '*.{{ $domain }}'
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-{{- if .Values.ingress.tls }}
-  tls:
-    - hosts:
-      - {{ $domain }}
-      {{- if .Values.ingress.secret }}
-      secretName: {{ .Values.ingress.secret }}
-      {{- else }}
-      secretName: {{ .Release.Name }}-crt
-      {{- end }}
-{{- end }}
+  {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     - host: {{ $domain }}
       http:
@@ -46,4 +38,10 @@ spec:
               serviceName: {{ $fullName }}-portal 
               servicePort: 80
               {{- end }}
+  {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned) }}
+  tls:
+    - hosts:
+        - {{ $domain }}
+      secretName: {{ printf "%s-tls" $domain }}
+  {{- end }}
 {{- end }}
