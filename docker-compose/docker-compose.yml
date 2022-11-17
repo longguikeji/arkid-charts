@@ -34,6 +34,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - K8SORDC='true'
+      - ARKIDBESVC=be
       - MYSQL_HOST=${INSTANCE}-db
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=arkid
