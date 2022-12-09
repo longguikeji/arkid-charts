@@ -126,7 +126,7 @@ externalRedis:
   db: 0
 ldap:
   enabled: true
-  image: harbor.longguikeji.com/ark-releases/arkid_ldap_server:latest
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid_ldap_server:2.6.8
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
