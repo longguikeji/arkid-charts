@@ -5,7 +5,7 @@ metadata:
   namespace: arkid
 spec:
   chart: arkid
-  version: 3.2.5
+  version: 3.2.6
   repo: https://harbor.longguikeji.com/chartrepo/public
   targetNamespace: arkid
   valuesContent: |-
