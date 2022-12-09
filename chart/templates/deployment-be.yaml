@@ -124,6 +124,8 @@ spec:
               value: "{{ include "arkid.fullname" . }}-hc"
             - name: ARKIDBESVC
               value: {{ include "arkid.fullname" . }}-be
+            - name: ARKIDPORTALSVC
+              value: "{{ include "arkid.fullname" . }}-portal"
           ports:
             - name: http
               containerPort: 80

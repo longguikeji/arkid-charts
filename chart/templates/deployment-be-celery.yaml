@@ -39,7 +39,15 @@ spec:
         - supervisord
         env:
         - name: TZ
-          value: Asia/Shanghai
+          value: 'Asia/Shanghai'
+        - name: K8SORDC
+          value: 'true'
+        - name: ARKID_AHC
+          value: "{{ include "arkid.fullname" . }}-hc"
+        - name: ARKIDBESVC
+          value: {{ include "arkid.fullname" . }}-be
+        - name: ARKIDPORTALSVC
+          value: "{{ include "arkid.fullname" . }}-portal"
         image: {{ .Values.tasks.image }}
         imagePullPolicy: IfNotPresent
         name: {{ include "arkid.name" . }}-celery

@@ -1,3 +1,22 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: helm-controller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: helm-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: helm-controller
+  namespace: kube-system
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -90,7 +109,6 @@ spec:
         type: object
     served: true
     storage: true
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -126,6 +144,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: helm-controller
+  namespace: kube-system
   labels:
     app: helm-controller
 spec:
@@ -138,7 +157,8 @@ spec:
       labels:
         app: helm-controller
     spec:
+      serviceAccount: helm-controller
       containers:
         - name: helm-controller
-          image: harbor.longguikeji.com/ark-releases/helm-controller:v0.12.1
+          image: harbor.longguikeji.com/ark-releases/helm-controller:v0.13.1
           command: ["helm-controller"]
