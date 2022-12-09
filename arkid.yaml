@@ -23,6 +23,12 @@ spec:
         limits: {}
         requests: {"cpu": "100m", "memory": "256Mi"}
     mysql:
+      architecture: standalone
+      auth:
+        rootPassword: root
+        database: arkid
+        username: arkid
+        password: arkid
       primary:
         persistence:
           enabled: true
