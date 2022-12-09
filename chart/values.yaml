@@ -323,7 +323,7 @@ ingressroute:
     certResolver: ali
 hc:
   enabled: true
-  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-helm-controller:2.6.7
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-helm-controller:2.6.8
   pullPolicy: IfNotPresent
   ## 主机标签
   ## 要符合json格式，如：
