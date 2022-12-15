@@ -218,7 +218,7 @@ docs:
   ## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
   enabled: true
 portal:
-  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-portal:2.6.8
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-portal:2.6.8-fix
   pullPolicy: IfNotPresent
   ## service 的类型，ClusterIP, NodePort, LoadBalancer
   svcType: NodePort
