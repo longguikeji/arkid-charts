@@ -24,7 +24,7 @@ DATABASES = {
 }
 
 # Redis cache
-REDISHOST = os.getenv("REDIS_HOST", "localhost")
+REDISHOST = os.getenv("REDIS_HOST", "arkid-redis")
 REDISPASSWD = os.getenv("REDIS_PASSWD", None)
 
 REDIS_CONFIG = {

@@ -1,0 +1,15 @@
+[submodule "docker-compose/src/be"]
+	path = docker-compose/src/be
+	url = git@github.com:longguikeji/arkid.git
+[submodule "docker-compose/src/be-ext"]
+	path = docker-compose/src/be-ext
+	url = git@github.com:longguikeji/arkid-extensions.git
+[submodule "docker-compose/src/ldap-server"]
+	path = docker-compose/src/ldap-server
+	url = git@github.com:longguikeji/arkid_ldap_server.git
+[submodule "docker-compose/src/desktop"]
+	path = docker-compose/src/desktop
+	url = git@github.com:longguikeji/ark-desktop.git
+[submodule "docker-compose/src/fe"]
+	path = docker-compose/src/fe
+	url = git@github.com:longguikeji/arkid-frontend-vue3.git
