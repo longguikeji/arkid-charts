@@ -25,7 +25,7 @@ services:
     depends_on:
       - be
   be:
-    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.6.9"
+    image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.6.9-fix"
     container_name: ${INSTANCE}-be
     sysctls:
       - net.core.somaxconn=65535
