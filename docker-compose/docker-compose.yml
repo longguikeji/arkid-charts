@@ -1,21 +1,5 @@
 version: '3.5'
 services:
-  reverse-proxy:
-    image: traefik:v2.9
-    container_name: ${INSTANCE}-proxy
-    environment:
-      - TZ=Asia/Shanghai
-      - ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}
-      - ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./acme:/etc/acme"
-      - "./traefik.yml:/traefik.yml:ro"
-    networks:
-      - arkid
   portal:
     image: nginx:alpine
     container_name: ${INSTANCE}-portal
@@ -31,12 +15,6 @@ services:
       - fe
     volumes:
       - ${WORKSPACE}/portal:/etc/nginx/conf.d
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.rule=Host(`${MY_HOSTNAME}`)"
-      - "traefik.http.routers.whoami.tls.certresolver=ali"
-      - "traefik.http.routers.whoami.tls.domains[0].main=${MY_HOSTNAME}"
   desktop:
     image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.8-fix"
     container_name: ${INSTANCE}-desktop
