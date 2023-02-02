@@ -333,3 +333,73 @@ hc:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
+
+apisix:
+  admin:
+    allow:
+      ipList:
+        - 0.0.0.0/0
+    credentials:
+      admin: 6f87ad84b625c8f1edd1c9f034335f13
+  gateway:
+    type: ClusterIP
+  etcd:
+    replicaCount: 1
+  extraVolumes:
+    - name: portal
+      configMap:
+        name: arkid
+  extraVolumeMounts:
+    - name: portal
+      mountPath: /tmp/default.conf
+      subPath: default.conf
+  configurationSnippet:
+    httpEnd: include /tmp/default.conf;
+  plugins:
+    - api-breaker
+    - authz-keycloak
+    - basic-auth
+    - batch-requests
+    - consumer-restriction
+    - cors
+    - echo
+    - fault-injection
+    - file-logger
+    - grpc-transcode
+    - hmac-auth
+    - http-logger
+    - ip-restriction
+    - ua-restriction
+    - jwt-auth
+    - kafka-logger
+    - key-auth
+    - limit-conn
+    - limit-count
+    - limit-req
+    - node-status
+    - openid-connect
+    - authz-casbin
+    - prometheus
+    - proxy-cache
+    - proxy-mirror
+    - proxy-rewrite
+    - redirect
+    - referer-restriction
+    - request-id
+    - request-validation
+    - response-rewrite
+    - serverless-post-function
+    - serverless-pre-function
+    - sls-logger
+    - syslog
+    - tcp-logger
+    - udp-logger
+    - uri-blocker
+    - wolf-rbac
+    - zipkin
+    - traffic-split
+    - gzip
+    - real-ip
+    - ext-plugin-pre-req
+    - ext-plugin-post-req
+    - forward-auth

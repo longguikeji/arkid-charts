@@ -92,6 +92,6 @@ spec:
       volumes:
       - configMap:
           defaultMode: 420
-          name: {{ template "arkid.fullname" . }}
+          name: arkid
         name: settings-local
 {{- end -}}

@@ -1,5 +1,6 @@
 annotations:
   category: sso
+
 apiVersion: v2
 name: arkid
 version: 3.2.15
@@ -20,6 +21,8 @@ dependencies:
 - condition: redis.enabled
   name: redis
   version: 10.5.7
+- name: apisix
+  version: 1.1.0
 home: https://saas.arkid.cc/
 sources:
   - https://github.com/longguikeji/arkid

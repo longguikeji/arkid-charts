@@ -31,12 +31,12 @@ spec:
             backend:
               {{- if $apiIsStable }}
               service:
-                name: {{ $fullName }}-portal
+                name: apisix-gateway
                 port:
-                  number: 80
+                  number: 8080
               {{- else }}
-              serviceName: {{ $fullName }}-portal 
-              servicePort: 80
+              serviceName: apisix-gateway
+              servicePort: 8080
               {{- end }}
     - host: "*.{{ $domain }}"
       http:
@@ -48,12 +48,12 @@ spec:
             backend:
               {{- if $apiIsStable }}
               service:
-                name: {{ $fullName }}-portal
+                name: apisix-gateway
                 port:
                   number: 80
               {{- else }}
-              serviceName: {{ $fullName }}-portal 
-              servicePort: 80
+              serviceName: apisix-gateway 
+              servicePort: 9080
               {{- end }}
   {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned) }}
   tls:

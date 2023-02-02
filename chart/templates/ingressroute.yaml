@@ -11,23 +11,23 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: HostRegexp(`{{ $domain }}`, `{subdomain:[a-zA-Z0-9-]+}.{{ $domain }}`)
+      match: HostRegexp(`{subdomain:[a-zA-Z0-9-]+}.{{ $domain }}`)
       priority: 11
       services:
-        - name: {{ $fullName }}-portal
-          port: 80
+        - name: apisix-gateway
+          port: 9080
     - kind: Rule
       match: Host(`*.{{ $domain }}`)
       priority: 10
       services:
-        - name: {{ $fullName }}-portal
-          port: 80
+        - name: apisix-gateway
+          port: 9080
     - kind: Rule
       match: Host(`{{ $domain }}`)
       priority: 12
       services:
-        - name: {{ $fullName }}-portal
-          port: 80
+        - name: apisix-gateway
+          port: 8080
 {{- if .Values.ingressroute.tls.enabled }}
   tls:
     certResolver: {{ .Values.ingressroute.tls.certResolver }}

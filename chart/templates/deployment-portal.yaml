@@ -1,3 +1,4 @@
+{{- if false -}}
 ---
 apiVersion: v1
 kind: Service
@@ -84,3 +85,4 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+{{- end -}}

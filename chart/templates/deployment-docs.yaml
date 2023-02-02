@@ -74,7 +74,7 @@ spec:
       volumes:
         - name: settings-local
           configMap:
-            name: {{ template "arkid.fullname" . }}
+            name: arkid
         - name: arkid-data-be
           {{- if .Values.persistence.init }}
           persistentVolumeClaim:

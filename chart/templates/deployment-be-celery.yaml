@@ -64,7 +64,7 @@ spec:
         resources: {{- toYaml .Values.tasks.resources | nindent 12 }}
       volumes:
       - configMap:
-          name: {{ template "arkid.fullname" . }}
+          name: arkid
         name: settings-local
       - name: arkid-data-be
         {{- if .Values.persistence.init }}
