@@ -57,6 +57,7 @@ spec:
     protocol: TCP
   - name: apisix-gateway-arkid
     port: 8080
+    nodePort: 32580
     targetPort: 8080
     protocol: TCP
   {{- end }}
