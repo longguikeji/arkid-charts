@@ -341,7 +341,7 @@ apisix:
     credentials:
       admin: 6f87ad84b625c8f1edd1c9f034335f13
   gateway:
-    type: ClusterIP
+    type: NodePort
   etcd:
     replicaCount: 1
   extraVolumes:
