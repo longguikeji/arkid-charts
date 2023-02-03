@@ -151,7 +151,7 @@ ldap:
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
 be:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.6.10"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid:2.6.11"
   pullPolicy: IfNotPresent
   ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
   resources:
@@ -333,7 +333,6 @@ hc:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
-
 apisix:
   admin:
     allow:
