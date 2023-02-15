@@ -89,6 +89,10 @@ spec:
       nodeSelector:
 {{ toYaml .Values.ldap.nodeSelector | indent 8 }}
       {{- end }}
+      {{- if .Values.ldap.tolerations }}
+      tolerations:
+{{ toYaml .Values.ldap.tolerations | indent 8 }}
+      {{- end }}
       volumes:
       - configMap:
           defaultMode: 420

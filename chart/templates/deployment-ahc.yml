@@ -61,6 +61,10 @@ spec:
       nodeSelector:
 {{ toYaml .Values.hc.nodeSelector | indent 8 }}
       {{- end }}
+      {{- if .Values.hc.tolerations }}
+      tolerations:
+{{ toYaml .Values.hc.tolerations | indent 8 }}
+      {{- end }}
       containers:
         - name: "{{ .Chart.Name }}-hc"
           image: "{{ .Values.hc.image}}"

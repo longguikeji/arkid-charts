@@ -54,29 +54,23 @@ mysql:
       enabled: true
     ## {  "limits": {"cpu": "800m","memory": "1024Mi"},"requests": {"cpu": "200m","memory": "256Mi"}}
     resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "200Mi"}}
-  secondary:
-    persistence:
-      enabled: true
-    replicas: 1
-    resources: {"limits": {"cpu": "1000m", "memory": "1024Mi"}, "requests": {"cpu": "100m", "memory": "200Mi"}}
-  ## 主机标签
-  ## 要符合json格式，如：
-  ## {
-  ##   "nfs": "true",
-  ##   "ip": "111.111.111.111"
-  ## }
-  nodeSelector: {}
-  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
-  nodeAffinity: {}
-  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  podAffinity: {}
-  # Anti-affinity rules for scheduling Pods of this StatefulSet.
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  # You may either toggle options below for default anti-affinity rules,
-  # or specify the whole set of anti-affinity rules instead of them.
-  podAntiAffinity: {}
+    ## 主机标签
+    ## 要符合json格式，如：
+    ## {
+    ##   "nfs": "true",
+    ##   "ip": "111.111.111.111"
+    ## }
+    nodeSelector: {}
+    ## @param primary.tolerations [array] Tolerations for MySQL primary pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## MySQL primary Pod security context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param primary.podSecurityContext.enabled Enable security context for MySQL primary pods
+    ## @param primary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
+    ##
+
 externalDatabase:
   host: ""
   port: 3306
@@ -101,25 +95,9 @@ redis:
     enabled: false
     slaveCount: 0
   clusterDomain: cluster.local
-  pullPolicy: IfNotPresent
-  ## 主机标签
-  ## 要符合json格式，如：
-  ## {
-  ##   "nfs": "true",
-  ##   "ip": "111.111.111.111"
-  ## }
-  nodeSelector: {}
-  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
-  nodeAffinity: {}
-  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  podAffinity: {}
-  # Anti-affinity rules for scheduling Pods of this StatefulSet.
-  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  # You may either toggle options below for default anti-affinity rules,
-  # or specify the whole set of anti-affinity rules instead of them.
-  podAntiAffinity: {}
+  master:
+    # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+    # tolerations: []
 externalRedis:
   host: ""
   port: 6379
@@ -139,8 +117,9 @@ ldap:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
-  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
   nodeAffinity: {}
   # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -165,13 +144,14 @@ be:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
-  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
   nodeAffinity: {}
-  # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
+  # Inter-Pod Affinity rules for scheduling Pods of this Deployment.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   podAffinity: {}
-  # Anti-affinity rules for scheduling Pods of this StatefulSet.
+  # Anti-affinity rules for scheduling Pods of this Deployment.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   # You may either toggle options below for default anti-affinity rules,
   # or specify the whole set of anti-affinity rules instead of them.
@@ -197,8 +177,9 @@ fe:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
-  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
   nodeAffinity: {}
   # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -217,6 +198,16 @@ fe:
 docs:
   ## 如果true，则会部署一个文档容器， 访问域名+/docs/ 可以查看arkid文档
   enabled: true
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
 portal:
   image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-portal:2.6.8-fix
   pullPolicy: IfNotPresent
@@ -229,8 +220,9 @@ portal:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
-  # Affinity rules for scheduling Pods of this StatefulSet on Nodes.
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
   nodeAffinity: {}
   # Inter-Pod Affinity rules for scheduling Pods of this StatefulSet.
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -247,6 +239,16 @@ desktop:
   resources:
     limits: {}
     requests: {"cpu": "100m", "memory": "124Mi"}
+  ## 主机标签
+  ## 要符合json格式，如：
+  ## {
+  ##   "nfs": "true",
+  ##   "ip": "111.111.111.111"
+  ## }
+  nodeSelector: {}
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
 tasks:
   image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:2.6.11-fix"
   ## 主机标签
@@ -256,6 +258,9 @@ tasks:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
   resources:
     limits: {}
     requests: {"cpu": "100m", "memory": "256Mi"}
@@ -333,7 +338,17 @@ hc:
   ##   "ip": "111.111.111.111"
   ## }
   nodeSelector: {}
+  # Affinity rules for scheduling Pods of this Deployment on Nodes.
+  # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  tolerations: []
 apisix:
+  apisix:
+    nodeSelector: {}
+    tolerations: []
+  etcd:
+    replicaCount: 1
+    nodeSelector: {}
+    tolerations: []
   admin:
     allow:
       ipList:
@@ -342,8 +357,6 @@ apisix:
       admin: 6f87ad84b625c8f1edd1c9f034335f13
   gateway:
     type: NodePort
-  etcd:
-    replicaCount: 1
   extraVolumes:
     - name: portal
       configMap:

@@ -53,6 +53,10 @@ spec:
       nodeSelector:
 {{ toYaml .Values.desktop.nodeSelector | indent 8 }}
       {{- end }}
+      {{- if .Values.desktop.tolerations }}
+      tolerations:
+{{ toYaml .Values.desktop.tolerations | indent 8 }}
+      {{- end }}
       volumes:
         - name: settings-local
           configMap:

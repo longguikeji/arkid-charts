@@ -71,6 +71,14 @@ spec:
             - mountPath: /var/arkid/mkdocs.yml
               name: settings-local
               subPath: mkdocs.yml
+      {{- if .Values.docs.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.docs.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.docs.tolerations }}
+      tolerations:
+{{ toYaml .Values.docs.tolerations | indent 8 }}
+      {{- end }}
       volumes:
         - name: settings-local
           configMap:
