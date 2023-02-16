@@ -70,7 +70,6 @@ mysql:
     ## @param primary.podSecurityContext.enabled Enable security context for MySQL primary pods
     ## @param primary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
     ##
-
 externalDatabase:
   host: ""
   port: 3306
@@ -96,8 +95,8 @@ redis:
     slaveCount: 0
   clusterDomain: cluster.local
   master:
-    # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
-    # tolerations: []
+  # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+  # tolerations: []
 externalRedis:
   host: ""
   port: 6379
@@ -233,7 +232,7 @@ portal:
   # or specify the whole set of anti-affinity rules instead of them.
   podAntiAffinity: {}
 desktop:
-  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.11
+  image: registry.cn-zhangjiakou.aliyuncs.com/ark-releases/ark-desktop:2.6.12
   pullPolicy: IfNotPresent
   nodeSelector: {}
   resources:
