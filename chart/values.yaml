@@ -249,7 +249,7 @@ desktop:
   # https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   tolerations: []
 tasks:
-  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:2.6.12"
+  image: "registry.cn-zhangjiakou.aliyuncs.com/ark-releases/arkid-celery-tasks:2.6.12-fix"
   ## 主机标签
   ## 要符合json格式，如：
   ## {
