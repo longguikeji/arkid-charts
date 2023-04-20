@@ -9,10 +9,17 @@ spec:
   repo: https://harbor.longguikeji.com/chartrepo/public
   targetNamespace: arkid
   valuesContent: |-
+    apisix:
+      etcd:
+        volumePermissions: 
+          enabled: true
+    redis:
+      volumePermissions: 
+        enabled: true
     persistence:
       init: true
       storageClass:
-      accessMode: ReadWriteOnce
+      accessMode: ReadWriteMany
       size: 8Gi
     be:
       resources:
@@ -23,6 +30,8 @@ spec:
         limits: {}
         requests: {"cpu": "100m", "memory": "256Mi"}
     mysql:
+      volumePermissions: 
+        enabled: true
       architecture: standalone
       auth:
         rootPassword: root
