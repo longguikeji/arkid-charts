@@ -3,8 +3,8 @@ annotations:
 
 apiVersion: v2
 name: arkid
-version: 3.3.0
-appVersion: "2.6.12"
+version: 3.3.2
+appVersion: "2.6.13"
 kubeVersion: ">= 1.16.0"
 description: ArkID is an enterprise SSO solutions, it supports LDAP, OpenID, SAML, OAuth and more
 type: application
