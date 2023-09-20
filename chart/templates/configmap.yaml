@@ -129,6 +129,11 @@ data:
     PRIVATE_IP="{{ include "arkid.fullname" . }}-be.{{ .Release.Namespace }}.svc.cluster.local"
     CELERY_IMPORTS = ('tasks.tasks',)
     K8S_INSTALL_APP_URL = "http://{{ include "arkid.fullname" . }}-hc"
+    # 引入configuration.py 本地配置文件
+    if os.path.exists(os.path.join(BASE_DIR, 'configuration.py')):
+        exec(open(os.path.join(BASE_DIR, 'configuration.py')).read())
+  configuration.py: |-
+    {{ .Values.be.configuration | nindent 4 }}
   supervisordcelery.conf: |-
     [supervisord]
     nodaemon=true

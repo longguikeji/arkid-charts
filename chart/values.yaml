@@ -135,6 +135,8 @@ be:
   resources:
     limits: {}
     requests: {"cpu": "100m", "memory": "256Mi"}
+  configuration: |-
+    CSRF_TRUSTED_ORIGINS = []
   replicas: 1
   ## 主机标签
   ## 要符合json格式，如：
